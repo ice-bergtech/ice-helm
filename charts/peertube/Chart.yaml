@@ -1,8 +1,8 @@
-name: ./charts/peertube
+name: peertube
 description: A Helm Chart for chocobozzz/peertube
 version: 0.0.1
 apiVersion: v2
 keywords:
-  - ./charts/peertube
+  - peertube
 sources:
 home:

@@ -84,5 +84,8 @@ spec:
           persistentVolumeClaim:
             claimName: data-peertube
         - name: config-peertube
-          persistentVolumeClaim:
-            claimName: config-peertube
+          configMap: 
+            name: '{{ .Release.Name }}-configmap'
+            items:
+              - key: 'production.yaml'
+                path: 'production.yaml'

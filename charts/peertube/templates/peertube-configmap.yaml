@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    labels:
+        io.kompose.service: peertube
+    name: "{{ .Release.Name }}-configmap"
+type: 
+data:
+    production.yaml: |-
+{{ .Files.Get "configmap/local-production.yml" | nindent 4 }}
+
