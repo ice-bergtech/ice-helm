@@ -44,7 +44,7 @@ jobs:
       
       - name: "Package, index and push chart"
         run: |
-          echo "Begin repository processing, packaing and indexing..."
+          echo "Begin repository processing, packaging and indexing..."
           
           cd repository
           repositoryRootDir=`pwd`
@@ -54,7 +54,7 @@ jobs:
           echo "Packaging charts..."
           for subdir in "$mainRootDir"/*/; do
               if [ -d "$subdir" ]; then
-                  echo "Processing and packaing chart in directory $subdir..."
+                  echo "Processing and packaging chart in directory $subdir..."
                   cd $repositoryRootDir
                   helm package $subdir
                   cd $mainRootDir
