@@ -93,12 +93,12 @@ redis:
   auth: null # Used by both standalone and sentinel
   db: 0
   sentinel:
-    enabled: false
-    enable_tls: false
-    master_name: ''
+    enabled: {{ .Values.redis.sentinal.enabled }}
+    enable_tls: {{ .Values.redis.sentinal.tls }}
+    master_name: {{ .Values.redis.sentinal.master_name }}
     sentinels:
-      - hostname: ''
-        port: 26379
+      - hostname: {{ .Values.redis.service.servicePortSentinel }}
+        port: {{ .Values.redis.service.servicePortSentinel }}
 
 # SMTP server to send emails
 smtp:
@@ -1025,7 +1025,7 @@ followings:
       index_url: ''
 
 theme:
-  default: 'default'
+  default: {{ .Values.instance.default_theme }}
 
 broadcast_message:
   enabled: false
