@@ -1,13 +1,16 @@
-name: peertube
-description: A Helm Chart for chocobozzz/peertube, a self-hosted federated video publishing platform
-version: 0.0.1
 apiVersion: v2
+name: peertube
+version: 0.0.1
+appVersion: v6.3.2-bookworm
 kubeVersion: ">=1.25.0-0"
+description: A Helm Chart for chocobozzz/peertube, a self-hosted federated video publishing platform
 keywords:
   - peertube
+home: https://github.com/ice-bergtech/ice-helm
 sources:
   - https://github.com/ice-bergtech/helm-charts/tree/main/charts/peertube
-home: https://github.com/ice-bergtech/helm-charts
+  - https://github.com/Chocobozzz/PeerTube
+  - https://hub.docker.com/r/chocobozzz/peertube/tags
 maintainers:
   - name: Iceberg Tech
     url: https://ice-bergtech.github.io/

@@ -5,6 +5,8 @@
 # -- Provide a name in place of `Peertube`
 name: 'Peertube'
 
+image: 'v6.3.2-bookworm' 
+
 # -- Override the namespace
 # @default -- `.Release.Namespace`
 namespaceOverride: ""

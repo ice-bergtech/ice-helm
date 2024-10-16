@@ -61,7 +61,7 @@ spec:
               value: '{{- .Values.subdomain }}.{{- .Values.base_domain }}'
             - name: POSTGRES_DB
               value: peertube
-          image: chocobozzz/peertube:production-bookworm
+          image: {{- .Values.image }}
           name: peertube
           ports:
             - containerPort: 1935
