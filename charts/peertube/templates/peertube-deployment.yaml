@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: peertube
+  name: peertube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: peertube
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: peertube
+    spec:
+      containers:
+        - env:
+            - name: PEERTUBE_ADMIN_EMAIL
+              value: admin@{{- .Values.base_domain }}
+            - name: PEERTUBE_CONTACT_FORM_ENABLED
+              value: "false"
+            - name: PEERTUBE_DB_HOSTNAME
+              value: postgres
+            - name: PEERTUBE_DB_PASSWORD
+            - name: PEERTUBE_DB_SSL
+              value: "false"
+            - name: PEERTUBE_DB_USERNAME
+              value: peertube
+            - name: PEERTUBE_INSTANCE_DESCRIPTION
+              value: '{{- .Values.instance_description }}'
+            - name: PEERTUBE_INSTANCE_NAME
+              value: '{{- .Values.instance_name }}'
+            - name: PEERTUBE_OBJECT_STORAGE_CREDENTIALS_ACCESS_KEY_ID
+              value: '{{buckets.peertube.access_key}}'
+            - name: PEERTUBE_OBJECT_STORAGE_CREDENTIALS_SECRET_ACCESS_KEY
+              value: '{{buckets.peertube.secret_key}}'
+            - name: PEERTUBE_OBJECT_STORAGE_ENABLED
+              value: "true"
+            - name: PEERTUBE_OBJECT_STORAGE_ENDPOINT
+              value: '{{buckets.peertube.url}}'
+            - name: PEERTUBE_OBJECT_STORAGE_REGION
+              value: '{{buckets.peertube.region}}'
+            - name: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BUCKET_NAME
+              value: '{{buckets.peertube.bucket}}'
+            - name: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_PREFIX
+              value: streaming-playlists/
+            - name: PEERTUBE_OBJECT_STORAGE_VIDEOS_BUCKET_NAME
+              value: '{{buckets.peertube.bucket}}'
+            - name: PEERTUBE_OBJECT_STORAGE_VIDEOS_PREFIX
+              value: videos/
+            - name: PEERTUBE_REDIS_HOSTNAME
+              value: redis
+            - name: PEERTUBE_SIGNUP_ENABLED
+              value: "false"
+            - name: PEERTUBE_TRANSCODING_ENABLED
+              value: "true"
+            - name: PEERTUBE_WEBSERVER_HOSTNAME
+              value: '{{- .Values.subdomain }}.{{- .Values.base_domain }}'
+            - name: POSTGRES_DB
+              value: peertube
+          image: chocobozzz/peertube:production-bookworm
+          name: peertube
+          ports:
+            - containerPort: 1935
+              protocol: TCP
+            - containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/client/dist
+              name: assets
+            - mountPath: /data
+              name: data-peertube
+            - mountPath: /config
+              name: config-peertube
+      restartPolicy: Always
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: assets
+        - name: data-peertube
+          persistentVolumeClaim:
+            claimName: data-peertube
+        - name: config-peertube
+          persistentVolumeClaim:
+            claimName: config-peertube

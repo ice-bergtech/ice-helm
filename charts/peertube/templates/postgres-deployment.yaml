@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: postgres
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: peertube
+            - name: POSTGRES_PASSWORD
+            - name: POSTGRES_USER
+              value: peertube
+          image: postgres:13-alpine
+          name: postgres
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data-postgres
+      restartPolicy: Always
+      volumes:
+        - name: data-postgres
+          persistentVolumeClaim:
+            claimName: data-postgres

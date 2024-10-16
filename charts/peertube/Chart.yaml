@@ -1,0 +1,8 @@
+name: ./charts/peertube
+description: A Helm Chart for chocobozzz/peertube
+version: 0.0.1
+apiVersion: v2
+keywords:
+  - ./charts/peertube
+sources:
+home:
