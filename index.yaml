@@ -2,10 +2,10 @@ apiVersion: v1
 entries:
   peertube:
   - apiVersion: v2
-    created: "2024-10-16T03:46:08.614907568Z"
+    created: "2024-10-16T03:53:18.535572839Z"
     description: A Helm Chart for chocobozzz/peertube, a self-hosted federated video
       publishing platform
-    digest: 901d7bc2b98479bc41a9be8b6e7091415bae1925025ea13768a24b1983fcb499
+    digest: 75d3f378df6d8de33ab41eb09347eb61d321e6ea24e88c8a11c8b3bd8204a6db
     home: https://github.com/ice-bergtech/helm-charts
     keywords:
     - peertube
@@ -19,4 +19,4 @@ entries:
     urls:
     - https://ice-bergtech.github.io/helm-charts/peertube-0.0.1.tgz
     version: 0.0.1
-generated: "2024-10-16T03:46:08.614279016Z"
+generated: "2024-10-16T03:53:18.534928943Z"
