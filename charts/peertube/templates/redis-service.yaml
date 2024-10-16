@@ -1,13 +1,29 @@
+{{- if .Values.redis.enabes -}}
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{- .Values.name }}-redis
+  namespace: 
   labels:
-    io.kompose.service: redis
-  name: redis
+    {{- with .Values.redis.service.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.redis.service.annotations }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   ports:
-    - name: "6379"
-      port: 6379
-      targetPort: 6379
+    - name: {{ .Values.redis.service.servicePortHttpName }}
+      protocol: TCP
+      port: {{ .Values.redis.service.servicePortHttp }}
+      targetPort: {{ .Values.redis.containerPorts.redis }}
+      {{- if eq .Values.redis.service.type "NodePort" }}
+      nodePort: {{ .Values.redis.service.nodePortHttp }}
+      {{- end }}
   selector:
     io.kompose.service: redis
+    {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.redis.name) | nindent 4 }}
+{{- end }}

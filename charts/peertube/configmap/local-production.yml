@@ -2,13 +2,13 @@
 
 listen:
   hostname: '127.0.0.1'
-  port: 9000
+  port: {{ .Values.peertube.service.servicePortHttp }}
 
 # Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
 webserver:
-  https: true
-  hostname: 'example.com'
-  port: 443
+  https: {{ .Values.webserver.https }}
+  hostname: {{ .Values.webserver.hostname }}
+  port: {{ .Values.webserver.port }}
 
 # Secrets you need to generate the first time you run PeerTube
 secrets:
@@ -88,8 +88,8 @@ database:
 # You can also specify a 'socket' path to a unix socket but first need to
 # set 'hostname' and 'port' to null
 redis:
-  hostname: '127.0.0.1'
-  port: 6379
+  hostname: '{{- .Values.name }}-redis'
+  port: {{ .Values.redis.service.servicePortHttp }}
   auth: null # Used by both standalone and sentinel
   db: 0
   sentinel:
@@ -113,7 +113,7 @@ smtp:
   tls: true # If you use StartTLS: false
   disable_starttls: false
   ca_file: null # Used for self signed certificates
-  from_address: 'admin@example.com'
+  from_address: {{ .Values.instance.admin_email }}
 
 email:
   body:
@@ -186,114 +186,144 @@ static_files:
   private_files_require_auth: true
 
 object_storage:
-  enabled: false
+  enabled: {{ .Values.s3.enabled }}
 
   # Without protocol, will default to HTTPS
   # Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests
-  endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
+  endpoint: {{ .Values.s3.endpoint }} # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
 
-  region: 'us-east-1'
+  region: {{ .Values.s3.region }}
 
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
     # Use null if your S3 provider does not support object ACL
-    public: 'public-read'
+    public: {{ .Values.s3.upload_acl.public }}
     # Set this ACL on each uploaded object of private/internal videos
     # PeerTube can proxify requests to private objects so your users can access them
     # Use null if your S3 provider does not support object ACL
-    private: 'private'
+    private: {{ .Values.s3.upload_acl.private }}
 
   proxy:
-    # If private files (private/internal video files) have a private ACL, users can't access directly the ressource
+    # If private files (private/internal video files) have a private ACL, users can't access directly the resource
     # PeerTube can proxify requests between your object storage service and your users
     # If you disable PeerTube proxy, ensure you use your own proxy that is able to access the private files
     # Or you can also set a public ACL for private files in object storage if you don't want to use a proxy
-    proxify_private_files: true
+    proxify_private_files: {{ .Values.s3.proxy_private_files }}
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
-    access_key_id: ''
+    access_key_id: {{ .Values.s3.credentials.access_key_id }}
     # You can also use AWS_SECRET_ACCESS_KEY env variable
-    secret_access_key: ''
+    secret_access_key: {{ .Values.s3.credentials.secret_access_key }}
 
   # Maximum amount to upload in one request to object storage
-  max_upload_part: 100MB
+  max_upload_part: {{ .Values.s3.max_upload_part }}
 
   # Maximum number of attempts to make a request to object storage
   # Some object storage providers (for instance Backblaze) expects the client to retry upload upon 5xx errors
   # If you're using such a provider then you can increase this value
-  max_request_attempts: 3
+  max_request_attempts: {{ .Values.s3.max_request_attempts }}
 
+{{- if eq .Values.s3.single_bucket '' }}
   streaming_playlists:
-    bucket_name: 'streaming-playlists'
+    bucket_name: {{ .Values.s3.streaming_playlists.bucket_name }}
 
     # Allows setting all buckets to the same value but with a different prefix
-    prefix: '' # Example: 'streaming-playlists:'
+    prefix: {{ .Values.s3.streaming_playlists.prefix }}
 
     # Base url for object URL generation, scheme and host will be replaced by this URL
     # Useful when you want to use a CDN/external proxy
-    base_url: '' # Example: 'https://mirror.example.com'
+    base_url: {{ .Values.s3.streaming_playlists.base_url }}
 
     # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
     # which can be a problem depending on your object storage provider
     # You can also choose to disable this feature to reduce live streams latency
     # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
-    store_live_streams: true
+    store_live_streams: {{ .Values.live.store_live_streams }}
 
   web_videos:
-    bucket_name: 'web-videos'
-    prefix: ''
-    base_url: ''
+    bucket_name: {{ .Values.s3.web_videos.bucket_name }}
+    prefix: {{ .Values.s3.web_videos.prefix }}
+    base_url: {{ .Values.s3.web_videos.base_url }}
 
   user_exports:
-    bucket_name: 'user-exports'
-    prefix: ''
-    base_url: ''
+    bucket_name: {{ .Values.s3.user_exports.bucket_name }}
+    prefix: {{ .Values.s3.user_exports.prefix }}
+    base_url: {{ .Values.s3.user_exports.base_url }}
 
   # Same settings but for original video files
   original_video_files:
-    bucket_name: 'original-video-files'
-    prefix: ''
-    base_url: ''
+    bucket_name: {{ .Values.s3.original_video_files.bucket_name }}
+    prefix: {{ .Values.s3.original_video_files.prefix }}
+    base_url: {{ .Values.s3.original_video_files.base_url }}
+{{- else }}
+  streaming_playlists:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    # Allows setting all buckets to the same value but with a different prefix
+    prefix: {{ .Values.s3.web_videos.bucket_name }}
+    # Base url for object URL generation, scheme and host will be replaced by this URL
+    # Useful when you want to use a CDN/external proxy
+    base_url: '' # Example: 'https://mirror.example.com'
+    # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
+    # which can be a problem depending on your object storage provider
+    # You can also choose to disable this feature to reduce live streams latency
+    # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
+    store_live_streams: {{ .Values.live.store_live_streams }}
+
+  web_videos:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    prefix: {{ .Values.s3.web_videos.bucket_name }}
+    base_url: {{ .Values.s3.web_videos.base_url }}
+
+  user_exports:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    prefix: {{ .Values.s3.user_exports.bucket_name }}
+    base_url: {{ .Values.s3.user_exports.base_url }}
+
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    prefix: {{ .Values.s3.original_video_files.bucket_name }}
+    base_url: {{ .Values.s3.original_video_files.base_url }}
+{{- end }}
 
 log:
-  level: 'info' # 'debug' | 'info' | 'warn' | 'error'
-
+  level: {{ .Values.log.level }}
   rotation:
-    enabled: true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
-    max_file_size: 12MB
-    max_files: 20
+    enabled: {{ .Values.log.rotation.enabled }} # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
+    max_file_size: {{ .Values.log.rotation.max_file_size }}
+    max_files: {{ .Values.log.rotation.max_files }}
 
-  anonymize_ip: false
+  anonymize_ip: {{ .Values.log.anonymize_ip }}
 
-  log_ping_requests: true
-  log_tracker_unknown_infohash: true
+  log_ping_requests: {{ .Values.log.log_ping_requests }}
+  log_tracker_unknown_infohash: {{ .Values.log.log_tracker_unknown_infohash }}
 
   # If you have many concurrent requests, you can disable HTTP requests logging to reduce PeerTube CPU load
-  log_http_requests: true
+  log_http_requests: {{ .Values.log.log_http_requests }}
 
-  prettify_sql: false
+  prettify_sql: {{ .Values.log.prettify_sql }}
 
   # Accept warn/error logs coming from the client
-  accept_client_log: true
+  accept_client_log: {{ .Values.log.accept_client_log }}
 
 # Support of Open Telemetry metrics and tracing
 # For more information: https://docs.joinpeertube.org/maintain/observability
 open_telemetry:
   metrics:
-    enabled: false
+    enabled: {{ .Values.metrics.enabled }}
 
     # How often viewers send playback stats to server
-    playback_stats_interval: '15 seconds'
+    playback_stats_interval: {{ .Values.metrics.playback_stats_interval }}
 
     http_request_duration:
       # You can disable HTTP request duration metric that can have a high tag cardinality
-      enabled: false
+      enabled: {{ .Values.metrics.http_request_duration.enabled }}
 
     # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
     prometheus_exporter:
-      hostname: '127.0.0.1'
-      port: 9091
+      hostname: {{ .Values.metrics.prometheus_exporter.hostname }}
+      port: {{ .Values.metrics.prometheus_exporter.port }}
 
   tracing:
     # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
@@ -345,7 +375,7 @@ remote_redundancy:
     # 'nobody': Do not accept remote redundancies
     # 'anybody': Accept remote redundancies from anybody
     # 'followings': Accept redundancies from instance followings
-    accept_from: 'anybody'
+    accept_from: 'followings'
 
 csp:
   enabled: false
@@ -416,13 +446,11 @@ views:
 
 # Used to get country location of views of local videos
 geo_ip:
-  enabled: true
-
+  enabled: {{ .Values.metrics.geo_ip.enabled }}
   country:
-    database_url: 'https://dbip.mirror.framasoft.org/files/dbip-country-lite-latest.mmdb'
-
+    database_url: {{ .Values.metrics.geo_ip.country_db_url }}
   city:
-    database_url: 'https://dbip.mirror.framasoft.org/files/dbip-city-lite-latest.mmdb'
+    database_url: {{ .Values.metrics.geo_ip.city_db_url }}
 
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
@@ -502,17 +530,17 @@ thumbnails:
 stats:
   # Display registration requests stats (average response time, total requests...)
   registration_requests:
-    enabled: true
+    enabled: {{ .Values.stats.enabled }}
 
   # Display abuses stats (average response time, total abuses...)
   abuses:
-    enabled: true
+    enabled: {{ .Values.stats.enabled }}
 
   total_moderators:
-    enabled: true
+    enabled: {{ .Values.stats.enabled }}
 
   total_admins:
-    enabled: true
+    enabled: {{ .Values.stats.enabled }}
 
 ###############################################################################
 #
@@ -539,7 +567,7 @@ cache:
 admin:
   # Used to generate the root user at first startup
   # And to receive emails from the contact form
-  email: 'admin@example.com'
+  email: {{ .Values.instance.admin_email }}
 
 contact_form:
   enabled: true

@@ -15,7 +15,6 @@ maintainers:
   - name: Iceberg Tech
     url: https://ice-bergtech.github.io/
 # dependencies:
-#   - name: redis-ha
-#     version: 4.27.6
-#     repository: https://dandydeveloper.github.io/charts/
-#     condition: redis-ha.enabled
+#   - name: redis
+#     version: 20.2.1
+#     repository: oci://registry-1.docker.io/bitnamicharts/

@@ -1,25 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.server.deploymentAnnotations) }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  name: {{- .Values.name }}
+  namespace: {{- .Values.namespace }}
   labels:
-    io.kompose.service: peertube
-  name: peertube
+    {{- include "argo-cd.labels" (dict "context" . "component" .Values.server.name "name" .Values.server.name) | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.peertube.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: peertube
+      {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.server.name) | nindent 6 }}
+  {{- with include "argo-cd.strategy" (mergeOverwrite (deepCopy .Values.global.deploymentStrategy) .Values.server.deploymentStrategy) }}
   strategy:
-    type: Recreate
+    {{- trim . | nindent 4 }}
+  {{- end }}
   template:
     metadata:
+      annotations:
+        {{- with (mergeOverwrite (deepCopy .Values.global.podAnnotations) .Values.server.podAnnotations) }}
+        {{- range $key, $value := . }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
       labels:
-        io.kompose.service: peertube
+        {{- include "argo-cd.labels" (dict "context" . "component" .Values.server.name "name" .Values.server.name) | nindent 8 }}
+        {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.server.podLabels) }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       containers:
-        - env:
-            - name: PEERTUBE_ADMIN_EMAIL
-              value: admin@{{- .Values.base_domain }}
+        - name: {{- .Values.peertube.name }}
+          image: {{- .Values.image }}
+          ports:
+            - containerPort: 1935
+              protocol: TCP
+            - containerPort: 9000
+              protocol: TCP
+          env:
             - name: PEERTUBE_CONTACT_FORM_ENABLED
               value: "false"
             - name: PEERTUBE_DB_HOSTNAME
@@ -29,30 +52,6 @@ spec:
               value: "false"
             - name: PEERTUBE_DB_USERNAME
               value: peertube
-            - name: PEERTUBE_INSTANCE_DESCRIPTION
-              value: '{{- .Values.instance_description }}'
-            - name: PEERTUBE_INSTANCE_NAME
-              value: '{{- .Values.instance_name }}'
-            - name: PEERTUBE_OBJECT_STORAGE_CREDENTIALS_ACCESS_KEY_ID
-              value: '{{buckets.peertube.access_key}}'
-            - name: PEERTUBE_OBJECT_STORAGE_CREDENTIALS_SECRET_ACCESS_KEY
-              value: '{{buckets.peertube.secret_key}}'
-            - name: PEERTUBE_OBJECT_STORAGE_ENABLED
-              value: "true"
-            - name: PEERTUBE_OBJECT_STORAGE_ENDPOINT
-              value: '{{buckets.peertube.url}}'
-            - name: PEERTUBE_OBJECT_STORAGE_REGION
-              value: '{{buckets.peertube.region}}'
-            - name: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_BUCKET_NAME
-              value: '{{buckets.peertube.bucket}}'
-            - name: PEERTUBE_OBJECT_STORAGE_STREAMING_PLAYLISTS_PREFIX
-              value: streaming-playlists/
-            - name: PEERTUBE_OBJECT_STORAGE_VIDEOS_BUCKET_NAME
-              value: '{{buckets.peertube.bucket}}'
-            - name: PEERTUBE_OBJECT_STORAGE_VIDEOS_PREFIX
-              value: videos/
-            - name: PEERTUBE_REDIS_HOSTNAME
-              value: redis
             - name: PEERTUBE_SIGNUP_ENABLED
               value: "false"
             - name: PEERTUBE_TRANSCODING_ENABLED
@@ -61,13 +60,6 @@ spec:
               value: '{{- .Values.subdomain }}.{{- .Values.base_domain }}'
             - name: POSTGRES_DB
               value: peertube
-          image: {{- .Values.image }}
-          name: peertube
-          ports:
-            - containerPort: 1935
-              protocol: TCP
-            - containerPort: 9000
-              protocol: TCP
           volumeMounts:
             - mountPath: /app/client/dist
               name: assets

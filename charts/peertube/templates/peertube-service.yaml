@@ -1,16 +1,43 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    io.kompose.service: peertube
-  name: peertube
+  name: {{- .Values.name }}
+  namespace: {{- .Values.namespace }}
 spec:
+  type: {{ .Values.peertube.service.type }}
+  {{- with .Values.peertube.service.externalIPs }}
+  externalIPs: {{ . }}
+  {{- end }}
+  {{- if or (eq .Values.peertube.service.type "LoadBalancer") (eq .Values.peertube.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.peertube.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if eq .Values.peertube.service.type "LoadBalancer" }}
+  {{- with .Values.peertube.service.loadBalancerClass }}
+  loadBalancerClass: {{ . }}
+  {{- end }}
+  {{- with .Values.peertube.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- with .Values.peertube.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  sessionAffinity: {{ .Values.peertube.service.sessionAffinity }}
   ports:
-    - name: "1935"
-      port: 1935
-      targetPort: 1935
-    - name: "9000"
-      port: 9000
-      targetPort: 9000
+    - name: {{ .Values.peertube.service.servicePortHttpName }}
+      protocol: TCP
+      port: {{ .Values.peertube.service.servicePortHttp }}
+      targetPort: {{ .Values.peertube.containerPorts.webgui }}
+      {{- if eq .Values.peertube.service.type "NodePort" }}
+      nodePort: {{ .Values.peertube.service.nodePortHttp }}
+      {{- end }}
+    - name: {{ .Values.peertube.service.servicePortLiveName }}
+      protocol: TCP
+      port: {{ .Values.peertube.service.servicePortLive }}
+      targetPort: {{ .Values.peertube.containerPorts.stream }}
+      {{- if eq .Values.peertube.service.type "NodePort" }}
+      nodePort: {{ .Values.peertube.service.nodePortHttp }}
+      {{- end }}
   selector:
-    io.kompose.service: peertube
+    {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.server.name) | nindent 4 }}

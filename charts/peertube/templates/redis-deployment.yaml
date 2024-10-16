@@ -1,23 +1,47 @@
+{{- is .Values.redis.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    io.kompose.service: redis
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.redis.deploymentAnnotations) }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   name: redis
+  namespace:
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.redis.deploymentAnnotations) }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: 1
+  revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
   selector:
     matchLabels:
-      io.kompose.service: redis
+      app.kubernetes.io/name: {{ include "argo-cd.name" . }}-{{ .Values.redis.name }}
   template:
     metadata:
       labels:
-        io.kompose.service: redis
+        {{- include "argo-cd.labels" (dict "context" . "component" .Values.redis.name "name" .Values.redis.name) | nindent 8 }}
+        {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.redis.podLabels) }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with (mergeOverwrite (deepCopy .Values.global.podAnnotations) .Values.redis.podAnnotations) }}
+      annotations:
+        {{- range $key, $value := . }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
-        - image: redis:6-alpine
-          name: redis
+        - name: {{ .Values.redis.name }}
+          image: {{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}
+          imagePullPolicy: {{ default .Values.global.image.imagePullPolicy .Values.redis.image.imagePullPolicy }}
           ports:
-            - containerPort: 6379
+            - name: redis
+              containerPort: {{ .Values.redis.containerPorts.redis }}
               protocol: TCP
       restartPolicy: Always
