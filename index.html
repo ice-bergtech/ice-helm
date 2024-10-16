@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>Helm Charts Repository</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #0056b3;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #chart-container {
+            margin-top: 20px;
+        }
+        .center {
+            text-align: center;
+        }
+        .command {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-family: monospace;
+            margin-bottom: 20px;
+        }
+        .explanation {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Helm Charts Repository</h1>
+    <div class="explanation" id="explanation" style="display: none;">
+        <p>To use the below charts, add this repository to your Helm configuration:</p>
+        <div id="repo-command" class="command"></div>
+    </div>
+    <div id="chart-container">
+        <!-- Content will be inserted here -->
+    </div>
+    <script src="js-yaml.min.js"></script>
+    <script>
+        async function fetchYaml() {
+            try {
+                console.log('Fetching YAML file...');
+                const response = await fetch('index.yaml');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const yamlText = await response.text();
+                console.log('YAML file fetched successfully.');
+                return yamlText;
+            } catch (error) {
+                console.error('Error fetching YAML file:', error);
+            }
+        }
+
+        function getRepoName(url) {
+            const urlParts = url.split('/');
+            // Return the second to last part of the URL as the repository name
+            return urlParts[urlParts.length - 2];
+        }
+
+        function parseAndRenderYaml(yamlText) {
+            console.log('Parsing YAML content...');
+            try {
+                const parsedData = jsyaml.load(yamlText);
+                console.log('YAML parsed successfully:', parsedData);
+                renderRepoCommand(parsedData);
+                renderCharts(parsedData);
+            } catch (error) {
+                console.error('Error parsing YAML:', error);
+            }
+        }
+
+        function renderRepoCommand(data) {
+            const repoCommandContainer = document.getElementById('repo-command');
+            const explanationContainer = document.getElementById('explanation');
+            if (data.entries) {
+                const firstChartName = Object.keys(data.entries)[0];
+                const firstChart = data.entries[firstChartName][0];
+                const repoUrl = firstChart.urls[0].replace(/\/[^/]+$/, '/');
+                const repoName = getRepoName(repoUrl);
+                repoCommandContainer.textContent = `helm repo add ${repoName} ${repoUrl}`;
+                explanationContainer.style.display = 'block';
+            }
+        }
+
+        function renderCharts(data) {
+            const container = document.getElementById('chart-container');
+            if (!data.entries) {
+                container.innerHTML = '<p class="center">No Helm Charts available.</p>';
+                return;
+            }
+            let htmlContent = '<table>';
+            htmlContent += '<tr><th>Name</th><th>Description</th><th>Version</th><th>App Version</th><th>URL</th><th>Created</th><th>Install Command</th></tr>';
+
+            for (const chart in data.entries) {
+                data.entries[chart].forEach(entry => {
+                    const repoUrl = entry.urls[0].replace(/\/[^/]+$/, '/');
+                    const repoName = getRepoName(repoUrl);
+                    const installCommand = `helm install ${entry.name} ${repoName}/${entry.name} --version ${entry.version}`;
+                    htmlContent += `
+                        <tr>
+                            <td>${entry.name}</td>
+                            <td>${entry.description}</td>
+                            <td>${entry.version}</td>
+                            <td>${entry.appVersion}</td>
+                            <td><a href="${entry.urls[0]}" target="_blank">Download</a></td>
+                            <td>${new Date(entry.created).toLocaleString()}</td>
+                            <td><code>${installCommand}</code></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            htmlContent += '</table>';
+            container.innerHTML = htmlContent;
+        }
+
+        async function init() {
+            const yamlText = await fetchYaml();
+            if (yamlText) {
+                parseAndRenderYaml(yamlText);
+            } else {
+                console.error('YAML text is null or undefined.');
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
