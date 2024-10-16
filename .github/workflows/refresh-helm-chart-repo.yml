@@ -46,9 +46,9 @@ jobs:
         run: |
           echo "Begin repository processing, packaing and indexing..."
           
-          cd repository/charts
+          cd repository
           repositoryRootDir=`pwd`
-          cd ../main
+          cd ../main/charts
           mainRootDir=`pwd`
 
           echo "Packaging charts..."
