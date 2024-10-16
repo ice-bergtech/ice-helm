@@ -1,8 +1,18 @@
 name: peertube
-description: A Helm Chart for chocobozzz/peertube
+description: A Helm Chart for chocobozzz/peertube, a self-hosted federated video publishing platform
 version: 0.0.1
 apiVersion: v2
+kubeVersion: ">=1.25.0-0"
 keywords:
   - peertube
 sources:
-home:
+  - https://github.com/ice-bergtech/helm-charts/tree/main/charts/peertube
+home: https://github.com/ice-bergtech/helm-charts
+maintainers:
+  - name: Iceberg Tech
+    url: https://ice-bergtech.github.io/
+# dependencies:
+#   - name: redis-ha
+#     version: 4.27.6
+#     repository: https://dandydeveloper.github.io/charts/
+#     condition: redis-ha.enabled

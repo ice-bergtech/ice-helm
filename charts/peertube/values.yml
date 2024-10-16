@@ -13,6 +13,8 @@ namespaceOverride: ""
 # you can set api versions here
 apiVersionOverrides: {}
 
+redis-ha.enabled: false
+
 hostname: 'peertube.local'
 
 
