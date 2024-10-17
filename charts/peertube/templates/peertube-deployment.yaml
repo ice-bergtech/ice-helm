@@ -79,5 +79,5 @@ spec:
           configMap: 
             name: '{{ .Release.Name }}-configmap'
             items:
-              - key: 'production.yaml'
-                path: 'production.yaml'
+              - key: 'helm-config.yaml'
+                path: 'helm-config.yaml'

@@ -6,6 +6,6 @@ metadata:
     name: "{{ .Release.Name }}-configmap"
 type: 
 data:
-    production.yaml: |-
-{{ .Files.Get "configmap/local-production.yml" | nindent 4 }}
+    helm-config.yaml: |-
+{{ .Files.Get "configmap/helm-config.yml.tpl" | nindent 4 }}
 

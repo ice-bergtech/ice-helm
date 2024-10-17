@@ -554,16 +554,6 @@ stats:
 #
 ###############################################################################
 
-cache:
-  previews:
-    size: 500 # Max number of previews you want to cache
-  captions:
-    size: 500 # Max number of video captions/subtitles you want to cache
-  torrents:
-    size: 500 # Max number of video torrents you want to cache
-  storyboards:
-    size: 500 # Max number of video storyboards you want to cache
-
 admin:
   # Used to generate the root user at first startup
   # And to receive emails from the contact form
@@ -582,11 +572,6 @@ signup:
   # Users fill a form to register so moderators can accept/reject the registration
   requires_approval: true
   requires_email_verification: false
-
-  filters:
-    cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
-      whitelist: []
-      blacklist: []
 
 user:
   history:
@@ -893,22 +878,15 @@ import:
 
 export:
   users:
-    # Allow users to export their PeerTube data in a .zip for backup or re-import
-    # Only one export at a time is allowed per user
-    enabled: true
-
-    # Max size of the current user quota to accept or not the export
-    # Goal of this setting is to not store too big archive file on your server disk
-    max_user_video_quota: 10GB
-
-    # How long PeerTube should keep the user export
-    export_expiration: '2 days'
+    enabled: {{ .Values.export.users.enabled }}
+    max_user_video_quota: '{{ .Values.export.users.max_user_video_quota }}'
+    export_expiration: '{{ .Values.export.users.export_expiration }}'
 
 auto_blacklist:
-  # New videos automatically blacklisted so moderators can review before publishing
   videos:
     of_users:
-      enabled: false
+      enabled: {{ .Values.instance.auto_blacklist }}
+
 
 # Instance settings
 instance:
@@ -999,30 +977,20 @@ services:
   twitter:
     # Indicates the Twitter/X account for the website or platform where the content was published
     # This is just an information injected in HTML that is required by Twitter/X
-    username: '@Chocobozzz'
+    username: '{{ .Values.instance.twitter_username }}'
 
 followers:
   instance:
-    # Allow or not other instances to follow yours
-    enabled: true
-    # Whether or not an administrator must manually validate a new follower
-    manual_approval: false
+    enabled: {{ .Values.instance.followers.enabled }}
+    manual_approval: {{ .Values.instance.followers.manual_approval }}
 
 followings:
   instance:
-    # If you want to automatically follow back new instance followers
-    # If this option is enabled, use the mute feature instead of deleting followings
-    # /!\ Don't enable this if you don't have a reactive moderation team /!\
     auto_follow_back:
-      enabled: false
-
-    # If you want to automatically follow instances of the public index
-    # If this option is enabled, use the mute feature instead of deleting followings
-    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+      enabled: {{ .Values.instance.followings.auto_follow_back.enabled }}
     auto_follow_index:
-      enabled: false
-      # Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
-      index_url: ''
+      enabled: {{ .Values.instance.followings.auto_follow_index.enabled }}
+      index_url: '{{ .Values.instance.followings.auto_follow_index.index_url }}'
 
 theme:
   default: {{ .Values.instance.default_theme }}
@@ -1080,3 +1048,59 @@ client:
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
   enabled: true
+
+
+
+
+#######################################3
+
+
+
+instance:
+  name: '{{ .Values.instance.name }}'
+  short_description: '{{ .Values.instance.short_description }}'
+  description: '{{ .Values.instance.description | markdownify }}'
+  terms: '{{ .Values.instance.terms | markdownify }}'
+  code_of_conduct: '{{ .Values.instance.code_of_conduct | markdownify }}'
+  moderation_information: '{{ .Values.instance.moderation_information | markdownify }}'
+  creation_reason: '{{ .Values.instance.creation_reason | markdownify }}'
+  administrator: '{{ .Values.instance.administrator | markdownify }}'
+  maintenance_lifetime: '{{ .Values.instance.maintenance_lifetime | markdownify }}'
+  business_model: '{{ .Values.instance.business_model | markdownify }}'
+  hardware_information: '{{ .Values.instance.hardware_information | markdownify }}'
+
+users:
+  enabled: {{ .Values.users.enabled }}
+
+video_channel_synchronization:
+  enabled: {{ .Values.video_channel_synchronization.enabled }}
+  max_per_user: {{ .Values.video_channel_synchronization.max_per_user }}
+  check_interval: '{{ .Values.video_channel_synchronization.check_interval }}'
+  videos_limit_per_synchronization: {{ .Values.video_channel_synchronization.videos_limit_per_synchronization }}
+  full_sync_videos_limit: {{ .Values.video_channel_synchronization.full_sync_videos_limit }}
+
+dlp:
+  force_ipv4: {{ .Values.dlp.force_ipv4 }}
+
+search:
+  remote_uri:
+    users: {{ .Values.search.remote_uri.users }}
+    anonymous: {{ .Values.search.remote_uri.anonymous }}
+  search_index:
+    enabled: {{ .Values.search.search_index.enabled }}
+    url: '{{ .Values.search.search_index.url }}'
+    disable_local_search: {{ .Values.search.search_index.disable_local_search }}
+    is_default_search: {{ .Values.search.search_index.is_default_search }}
+
+client:
+  videos:
+    miniature:
+      prefer_author_display_name: {{ .Values.client.videos.miniature.prefer_author_display_name }}
+      display_author_avatar: {{ .Values.client.videos.miniature.display_author_avatar }}
+
+  menu:
+    login:
+      redirect_on_single_external_auth: {{ .Values.client.menu.login.redirect_on_single_external_auth }}
+
+storyboards:
+  enabled: {{ .Values.storyboards.enabled }}
