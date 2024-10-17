@@ -24,6 +24,11 @@ redis:
     tag: 6-alpine
   containerPorts:
     redis: 6379
+    sentinal: 26379
+  sentinal:
+    enabled: false
+    tls: false
+    master_name: ''
   service:
     labels:
     # -- one of: ClusterIP | LoadBalancer | NodePort
@@ -31,7 +36,28 @@ redis:
     annotations:
     servicePortHttpName: redis
     servicePortHttp: 6379
+    servicePortSentinelName: sentinal
+    servicePortSentinel: 26379
+    sentinelHostname: ''
     nodePortHttp: ''
+
+database:
+  enabled: true
+  name: postgres
+  image:
+    repository:
+    tag:
+  containerPorts:
+    db: 5432
+  service:
+    labels:
+    # -- one of: ClusterIP | LoadBalancer | NodePort
+    type: ClusterIP 
+    annotations:
+    servicePortHttpName: db
+    servicePortHttp: 5432
+    nodePortHttp: ''
+
 
 selectorLabels: []
 webserver:
@@ -216,6 +242,37 @@ instance:
   default_client_route: "/videos/trending"
   # -- Default instance theme
   default_theme: 'dark'
+  # Cards configuration to format video in Twitter/X
+  # All other social media (Facebook, Mastodon, etc.) are supported out of the box
+  # Indicates the Twitter/X account for the website or platform where the content was published
+  # This is just an information injected in HTML that is required by Twitter/X
+  twitter_username: '@Chocobozzz'
+  followers:
+    # Allow or not other instances to follow yours
+    enabled: true
+    # Whether or not an administrator must manually validate a new follower
+    manual_approval: false
+  followings:
+    # If you want to automatically follow back new instance followers
+    # If this option is enabled, use the mute feature instead of deleting followings
+    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+    auto_follow_back:
+      enabled: false
+    # If you want to automatically follow instances of the public index
+    # If this option is enabled, use the mute feature instead of deleting followings
+    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+    auto_follow_index:
+      enabled: false
+      # Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
+      index_url: ''
+
+  broadcast_message:
+    enabled: false
+    message: ''
+    level: 'info'
+    dismissable: false
+
+
   # Service Links
   services: |
     # Cards configuration to format video in Twitter/X
@@ -285,32 +342,6 @@ instance:
       enabled: true
     webtorrent:
       enabled: false
-  followers: |
-    instance:
-      # Allow or not other instances to follow yours
-      enabled: true
-      # Whether or not an administrator must manually validate a new follower
-      manual_approval: false
-  followings: |
-    instance:
-      # If you want to automatically follow back new instance followers
-      # If this option is enabled, use the mute feature instead of deleting followings
-      # /!\ Don't enable this if you don't have a reactive moderation team /!\
-      auto_follow_back:
-        enabled: false
-
-      # If you want to automatically follow instances of the public index
-      # If this option is enabled, use the mute feature instead of deleting followings
-      # /!\ Don't enable this if you don't have a reactive moderation team /!\
-      auto_follow_index:
-        enabled: false
-        # Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
-        index_url: ''
-  broadcast_message: |
-    enabled: false
-    level: info # 'info' | 'warning' | 'error'
-    message: '' # Supports markdown
-    dismissable: false
   # -- Search configuration
   search: |
     # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
@@ -338,3 +369,84 @@ instance:
       is_default_search: false
   secrets:
     peertube: ''
+
+########################################
+
+instance:
+  name: 'PeerTube'
+  short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
+  description: 'Welcome to this PeerTube instance!'
+  terms: 'No terms for now.' 
+  code_of_conduct: '' 
+  moderation_information: '' 
+  creation_reason: '' 
+  administrator: '' 
+  maintenance_lifetime: '' 
+  business_model: '' 
+  hardware_information: ''
+  # New videos automatically blacklisted so moderators can review before publishing
+  auto_blacklist: false
+
+users:
+  enabled: true
+
+video_channel_synchronization:
+  enabled: false
+  max_per_user: 10
+  check_interval: '1h'
+  videos_limit_per_synchronization: 10
+  full_sync_videos_limit: 1000
+
+dlp:
+  force_ipv4: false
+
+export:
+  users:
+    # Allow users to export their PeerTube data in a .zip for backup or re-import
+    # Only one export at a time is allowed per user
+    enabled: true
+    # Max size of the current user quota to accept or not the export
+    # Goal of this setting is to not store too big archive file on your server disk
+    max_user_video_quota: '10GB'
+    # How long PeerTube should keep the user export
+    export_expiration: '2d'
+
+services:
+  twitter:
+    username: 
+
+followings:
+  instance:
+    auto_follow_back:
+      enabled: false
+    auto_follow_index:
+      enabled: false
+      index_url: ''
+
+theme:
+  default: 'default'
+
+
+
+search:
+  remote_uri:
+    users: true
+    anonymous: false
+  search_index:
+    enabled: false
+    url: ''
+    disable_local_search: false
+    is_default_search: false
+
+client:
+  videos:
+    miniature:
+      prefer_author_display_name: false
+      display_author_avatar: false
+
+  menu:
+    login:
+      redirect_on_single_external_auth: false
+
+storyboards:
+  enabled: true
