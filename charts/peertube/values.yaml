@@ -372,20 +372,20 @@ instance:
 
 ########################################
 
-instance:
-  name: 'PeerTube'
-  short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
-  description: 'Welcome to this PeerTube instance!'
-  terms: 'No terms for now.' 
-  code_of_conduct: '' 
-  moderation_information: '' 
-  creation_reason: '' 
-  administrator: '' 
-  maintenance_lifetime: '' 
-  business_model: '' 
-  hardware_information: ''
-  # New videos automatically blacklisted so moderators can review before publishing
-  auto_blacklist: false
+# instance:
+#   name: 'PeerTube'
+#   short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
+#   description: 'Welcome to this PeerTube instance!'
+#   terms: 'No terms for now.' 
+#   code_of_conduct: '' 
+#   moderation_information: '' 
+#   creation_reason: '' 
+#   administrator: '' 
+#   maintenance_lifetime: '' 
+#   business_model: '' 
+#   hardware_information: ''
+#   # New videos automatically blacklisted so moderators can review before publishing
+#   auto_blacklist: false
 
 users:
   enabled: true
