@@ -1,4 +1,4 @@
-{{- is .Values.redis.enabled -}}
+{{- if .Values.redis.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,11 +21,10 @@ spec:
   revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "argo-cd.name" . }}-{{ .Values.redis.name }}
+      app.kubernetes.io/name: {{ .Values.redis.name }}
   template:
     metadata:
       labels:
-        {{- include "argo-cd.labels" (dict "context" . "component" .Values.redis.name "name" .Values.redis.name) | nindent 8 }}
         {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.redis.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -45,3 +44,4 @@ spec:
               containerPort: {{ .Values.redis.containerPorts.redis }}
               protocol: TCP
       restartPolicy: Always
+{{- end }}

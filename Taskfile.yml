@@ -13,6 +13,7 @@ tasks:
   default:
     cmds:
       - echo "{{.GREETING}}"
+      - task: chart:docs
     silent: true
 
   setup:

@@ -1,19 +1,19 @@
 # Fetched from https://github.com/Chocobozzz/PeerTube/blob/1c5f16ed63c4103d51cc7bc7eadc94a6a873bf74/config/production.yaml.example
 
 listen:
-  hostname: '127.0.0.1'
-  port: {{ .Values.peertube.service.servicePortHttp }}
+  hostname: "127.0.0.1"
+  port: "{{ .Values.peertube.service.servicePortHttp }}"
 
 # Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
 webserver:
-  https: {{ .Values.webserver.https }}
-  hostname: {{ .Values.webserver.hostname }}
-  port: {{ .Values.webserver.port }}
+  https: "{{ .Values.webserver.https }}"
+  hostname: "{{ .Values.webserver.hostname }}"
+  port: "{{ .Values.webserver.port }}"
 
 # Secrets you need to generate the first time you run PeerTube
 secrets:
   # Generate one using `openssl rand -hex 32`
-  peertube: ''
+  peertube: ""
 
 rates_limit:
   api:
@@ -61,26 +61,25 @@ rates_limit:
     window: 5 seconds
     max: 5
 
-
 oauth2:
   token_lifetime:
-    access_token: '1 day'
-    refresh_token: '2 weeks'
+    access_token: "1 day"
+    refresh_token: "2 weeks"
 
 # Proxies to trust to get real client IP
 # If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
 # If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
 trust_proxy:
-  - 'loopback'
+  - "loopback"
 
 # Your database name will be database.name OR 'peertube'+database.suffix
 database:
-  hostname: '127.0.0.1'
+  hostname: "127.0.0.1"
   port: 5432
   ssl: false
-  suffix: '_prod'
-  username: 'peertube'
-  password: 'peertube'
+  suffix: "_prod"
+  username: "peertube"
+  password: "peertube"
   pool:
     max: 5
 
@@ -88,17 +87,17 @@ database:
 # You can also specify a 'socket' path to a unix socket but first need to
 # set 'hostname' and 'port' to null
 redis:
-  hostname: '{{- .Values.name }}-redis'
-  port: {{ .Values.redis.service.servicePortHttp }}
+  hostname: "{{- .Values.name }}-redis"
+  port: "{{ .Values.redis.service.servicePortHttp }}"
   auth: null # Used by both standalone and sentinel
   db: 0
   sentinel:
-    enabled: {{ .Values.redis.sentinal.enabled }}
-    enable_tls: {{ .Values.redis.sentinal.tls }}
-    master_name: {{ .Values.redis.sentinal.master_name }}
+    enabled: "{{ .Values.redis.sentinal.enabled }}"
+    enable_tls: "{{ .Values.redis.sentinal.tls }}"
+    master_name: "{{ .Values.redis.sentinal.master_name }}"
     sentinels:
-      - hostname: {{ .Values.redis.service.servicePortSentinel }}
-        port: {{ .Values.redis.service.servicePortSentinel }}
+      - hostname: "{{ .Values.redis.service.servicePortSentinel }}"
+        port: "{{ .Values.redis.service.servicePortSentinel }}"
 
 # SMTP server to send emails
 smtp:
@@ -113,13 +112,13 @@ smtp:
   tls: true # If you use StartTLS: false
   disable_starttls: false
   ca_file: null # Used for self signed certificates
-  from_address: {{ .Values.instance.admin_email }}
+  from_address: "{{ .Values.instance.admin_email }}"
 
 email:
   body:
-    signature: 'PeerTube'
+    signature: "PeerTube"
   subject:
-    prefix: '[PeerTube]'
+    prefix: "[PeerTube]"
 
 # Update default PeerTube values
 # Set by API when the field is not provided and put as default value in client
@@ -152,23 +151,23 @@ defaults:
 
 # From the project root directory
 storage:
-  tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
-  tmp_persistent: '/var/www/peertube/storage/tmp-persistent/' # As tmp but the directory is not cleaned up between PeerTube restarts
-  bin: '/var/www/peertube/storage/bin/'
-  avatars: '/var/www/peertube/storage/avatars/'
-  web_videos: '/var/www/peertube/storage/web-videos/'
-  streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
-  original_video_files: '/var/www/peertube/storage/original-video-files/'
-  redundancy: '/var/www/peertube/storage/redundancy/'
-  logs: '/var/www/peertube/storage/logs/'
-  previews: '/var/www/peertube/storage/previews/'
-  thumbnails: '/var/www/peertube/storage/thumbnails/'
-  storyboards: '/var/www/peertube/storage/storyboards/'
-  torrents: '/var/www/peertube/storage/torrents/'
-  captions: '/var/www/peertube/storage/captions/'
-  cache: '/var/www/peertube/storage/cache/'
-  plugins: '/var/www/peertube/storage/plugins/'
-  well_known: '/var/www/peertube/storage/well-known/'
+  tmp: "/var/www/peertube/storage/tmp/" # Use to download data (imports etc), store uploaded files before and during processing...
+  tmp_persistent: "/var/www/peertube/storage/tmp-persistent/" # As tmp but the directory is not cleaned up between PeerTube restarts
+  bin: "/var/www/peertube/storage/bin/"
+  avatars: "/var/www/peertube/storage/avatars/"
+  web_videos: "/var/www/peertube/storage/web-videos/"
+  streaming_playlists: "/var/www/peertube/storage/streaming-playlists/"
+  original_video_files: "/var/www/peertube/storage/original-video-files/"
+  redundancy: "/var/www/peertube/storage/redundancy/"
+  logs: "/var/www/peertube/storage/logs/"
+  previews: "/var/www/peertube/storage/previews/"
+  thumbnails: "/var/www/peertube/storage/thumbnails/"
+  storyboards: "/var/www/peertube/storage/storyboards/"
+  torrents: "/var/www/peertube/storage/torrents/"
+  captions: "/var/www/peertube/storage/captions/"
+  cache: "/var/www/peertube/storage/cache/"
+  plugins: "/var/www/peertube/storage/plugins/"
+  well_known: "/var/www/peertube/storage/well-known/"
   # Overridable client files in client/dist/assets/images:
   # - logo.svg
   # - favicon.png
@@ -179,151 +178,88 @@ storage:
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
   # If not, peertube will fallback to the default file
-  client_overrides: '/var/www/peertube/storage/client-overrides/'
+  client_overrides: "/var/www/peertube/storage/client-overrides/"
 
 static_files:
   # Require and check user authentication when accessing private files (internal/private video files)
   private_files_require_auth: true
 
 object_storage:
-  enabled: {{ .Values.s3.enabled }}
+  enabled: "{{ .Values.s3.enabled }}"
 
   # Without protocol, will default to HTTPS
   # Your S3 provider must support virtual hosting of buckets as PeerTube doesn't support path style requests
-  endpoint: {{ .Values.s3.endpoint }} # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
+  endpoint: "{{ .Values.s3.endpoint }}" # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
 
-  region: {{ .Values.s3.region }}
+  region: "{{ .Values.s3.region }}"
 
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
     # Use null if your S3 provider does not support object ACL
-    public: {{ .Values.s3.upload_acl.public }}
+    public: "{{ .Values.s3.upload_acl.public }}"
     # Set this ACL on each uploaded object of private/internal videos
     # PeerTube can proxify requests to private objects so your users can access them
     # Use null if your S3 provider does not support object ACL
-    private: {{ .Values.s3.upload_acl.private }}
+    private: "{{ .Values.s3.upload_acl.private }}"
 
   proxy:
     # If private files (private/internal video files) have a private ACL, users can't access directly the resource
     # PeerTube can proxify requests between your object storage service and your users
     # If you disable PeerTube proxy, ensure you use your own proxy that is able to access the private files
     # Or you can also set a public ACL for private files in object storage if you don't want to use a proxy
-    proxify_private_files: {{ .Values.s3.proxy_private_files }}
+    proxify_private_files: "{{ .Values.s3.proxy_private_files }}"
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
-    access_key_id: {{ .Values.s3.credentials.access_key_id }}
+    access_key_id: "{{ .Values.s3.credentials.access_key_id }}"
     # You can also use AWS_SECRET_ACCESS_KEY env variable
-    secret_access_key: {{ .Values.s3.credentials.secret_access_key }}
+    secret_access_key: "{{ .Values.s3.credentials.secret_access_key }}"
 
   # Maximum amount to upload in one request to object storage
-  max_upload_part: {{ .Values.s3.max_upload_part }}
+  max_upload_part: "{{ .Values.s3.max_upload_part }}"
 
   # Maximum number of attempts to make a request to object storage
   # Some object storage providers (for instance Backblaze) expects the client to retry upload upon 5xx errors
   # If you're using such a provider then you can increase this value
-  max_request_attempts: {{ .Values.s3.max_request_attempts }}
-
-{{- if eq .Values.s3.single_bucket '' }}
-  streaming_playlists:
-    bucket_name: {{ .Values.s3.streaming_playlists.bucket_name }}
-
-    # Allows setting all buckets to the same value but with a different prefix
-    prefix: {{ .Values.s3.streaming_playlists.prefix }}
-
-    # Base url for object URL generation, scheme and host will be replaced by this URL
-    # Useful when you want to use a CDN/external proxy
-    base_url: {{ .Values.s3.streaming_playlists.base_url }}
-
-    # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
-    # which can be a problem depending on your object storage provider
-    # You can also choose to disable this feature to reduce live streams latency
-    # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
-    store_live_streams: {{ .Values.live.store_live_streams }}
-
-  web_videos:
-    bucket_name: {{ .Values.s3.web_videos.bucket_name }}
-    prefix: {{ .Values.s3.web_videos.prefix }}
-    base_url: {{ .Values.s3.web_videos.base_url }}
-
-  user_exports:
-    bucket_name: {{ .Values.s3.user_exports.bucket_name }}
-    prefix: {{ .Values.s3.user_exports.prefix }}
-    base_url: {{ .Values.s3.user_exports.base_url }}
-
-  # Same settings but for original video files
-  original_video_files:
-    bucket_name: {{ .Values.s3.original_video_files.bucket_name }}
-    prefix: {{ .Values.s3.original_video_files.prefix }}
-    base_url: {{ .Values.s3.original_video_files.base_url }}
-{{- else }}
-  streaming_playlists:
-    bucket_name: {{ .Values.s3.single_bucket }}
-    # Allows setting all buckets to the same value but with a different prefix
-    prefix: {{ .Values.s3.web_videos.bucket_name }}
-    # Base url for object URL generation, scheme and host will be replaced by this URL
-    # Useful when you want to use a CDN/external proxy
-    base_url: '' # Example: 'https://mirror.example.com'
-    # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
-    # which can be a problem depending on your object storage provider
-    # You can also choose to disable this feature to reduce live streams latency
-    # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
-    store_live_streams: {{ .Values.live.store_live_streams }}
-
-  web_videos:
-    bucket_name: {{ .Values.s3.single_bucket }}
-    prefix: {{ .Values.s3.web_videos.bucket_name }}
-    base_url: {{ .Values.s3.web_videos.base_url }}
-
-  user_exports:
-    bucket_name: {{ .Values.s3.single_bucket }}
-    prefix: {{ .Values.s3.user_exports.bucket_name }}
-    base_url: {{ .Values.s3.user_exports.base_url }}
-
-  # Same settings but for original video files
-  original_video_files:
-    bucket_name: {{ .Values.s3.single_bucket }}
-    prefix: {{ .Values.s3.original_video_files.bucket_name }}
-    base_url: {{ .Values.s3.original_video_files.base_url }}
-{{- end }}
+  max_request_attempts: "{{ .Values.s3.max_request_attempts }}"
 
 log:
-  level: {{ .Values.log.level }}
+  level: "{{ .Values.log.level }}"
   rotation:
-    enabled: {{ .Values.log.rotation.enabled }} # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
-    max_file_size: {{ .Values.log.rotation.max_file_size }}
-    max_files: {{ .Values.log.rotation.max_files }}
+    enabled: "{{ .Values.log.rotation.enabled }}" # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
+    max_file_size: "{{ .Values.log.rotation.max_file_size }}"
+    max_files: "{{ .Values.log.rotation.max_files }}"
 
-  anonymize_ip: {{ .Values.log.anonymize_ip }}
+  anonymize_ip: "{{ .Values.log.anonymize_ip }}"
 
-  log_ping_requests: {{ .Values.log.log_ping_requests }}
-  log_tracker_unknown_infohash: {{ .Values.log.log_tracker_unknown_infohash }}
+  log_ping_requests: "{{ .Values.log.log_ping_requests }}"
+  log_tracker_unknown_infohash: "{{ .Values.log.log_tracker_unknown_infohash }}"
 
   # If you have many concurrent requests, you can disable HTTP requests logging to reduce PeerTube CPU load
-  log_http_requests: {{ .Values.log.log_http_requests }}
+  log_http_requests: "{{ .Values.log.log_http_requests }}"
 
-  prettify_sql: {{ .Values.log.prettify_sql }}
+  prettify_sql: "{{ .Values.log.prettify_sql }}"
 
   # Accept warn/error logs coming from the client
-  accept_client_log: {{ .Values.log.accept_client_log }}
+  accept_client_log: "{{ .Values.log.accept_client_log }}"
 
 # Support of Open Telemetry metrics and tracing
 # For more information: https://docs.joinpeertube.org/maintain/observability
 open_telemetry:
   metrics:
-    enabled: {{ .Values.metrics.enabled }}
+    enabled: "{{ .Values.metrics.enabled }}"
 
     # How often viewers send playback stats to server
-    playback_stats_interval: {{ .Values.metrics.playback_stats_interval }}
+    playback_stats_interval: "{{ .Values.metrics.playback_stats_interval }}"
 
     http_request_duration:
       # You can disable HTTP request duration metric that can have a high tag cardinality
-      enabled: {{ .Values.metrics.http_request_duration.enabled }}
+      enabled: "{{ .Values.metrics.http_request_duration.enabled }}"
 
     # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
     prometheus_exporter:
-      hostname: {{ .Values.metrics.prometheus_exporter.hostname }}
-      port: {{ .Values.metrics.prometheus_exporter.port }}
+      hostname: "{{ .Values.metrics.prometheus_exporter.hostname }}"
+      port: "{{ .Values.metrics.prometheus_exporter.port }}"
 
   tracing:
     # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
@@ -331,7 +267,7 @@ open_telemetry:
 
     # Send traces to a Jaeger compatible endpoint
     jaeger_exporter:
-      endpoint: ''
+      endpoint: ""
 
 trending:
   videos:
@@ -339,18 +275,18 @@ trending:
 
     algorithms:
       enabled:
-        - 'hot' # Adaptation of Reddit's 'Hot' algorithm
-        - 'most-viewed' # Number of views in the last x days
-        - 'most-liked' # Global views since the upload of the video
+        - "hot" # Adaptation of Reddit's 'Hot' algorithm
+        - "most-viewed" # Number of views in the last x days
+        - "most-liked" # Global views since the upload of the video
 
-      default: 'most-viewed'
+      default: "most-viewed"
 
 # Cache remote videos on your server, to help other instances to broadcast the video
 # You can define multiple caches using different sizes/strategies
 # Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following
 redundancy:
   videos:
-    check_interval: '1 hour' # How often you want to check new videos to cache
+    check_interval: "1 hour" # How often you want to check new videos to cache
     strategies: # Just uncomment strategies you want
 #      -
 #        size: '10GB'
@@ -375,7 +311,7 @@ remote_redundancy:
     # 'nobody': Do not accept remote redundancies
     # 'anybody': Accept remote redundancies from anybody
     # 'followings': Accept redundancies from instance followings
-    accept_from: 'followings'
+    accept_from: "followings"
 
 csp:
   enabled: false
@@ -417,16 +353,16 @@ views:
     # -1 means no cleanup
     # Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)
     remote:
-      max_age: '30 days'
+      max_age: "30 days"
 
     # PeerTube buffers local video views before updating and federating the video
-    local_buffer_update_interval: '30 minutes'
+    local_buffer_update_interval: "30 minutes"
 
     # How long does it take to count again a view from the same user
-    view_expiration: '1 hour'
+    view_expiration: "1 hour"
 
     # Minimum amount of time the viewer has to watch the video before PeerTube adds a view
-    count_view_after: '10 seconds'
+    count_view_after: "10 seconds"
 
     # Player can send a session id string to track the user
     # Since this can be spoofed by users to create fake views, you have the option to disable this feature
@@ -437,28 +373,28 @@ views:
     # Increase the value or set null to disable it if you plan to have many viewers
     watching_interval:
       # Non logged-in viewers
-      anonymous: '5 seconds'
+      anonymous: "5 seconds"
 
       # Logged-in users of your instance
       # Unlike anonymous viewers, this endpoint is also used to store the "last watched video timecode" for your users
       # Increasing this value reduces the accuracy of the video resume
-      users: '5 seconds'
+      users: "5 seconds"
 
 # Used to get country location of views of local videos
 geo_ip:
-  enabled: {{ .Values.metrics.geo_ip.enabled }}
+  enabled: "{{ .Values.metrics.geo_ip.enabled }}"
   country:
-    database_url: {{ .Values.metrics.geo_ip.country_db_url }}
+    database_url: "{{ .Values.metrics.geo_ip.country_db_url }}"
   city:
-    database_url: {{ .Values.metrics.geo_ip.city_db_url }}
+    database_url: "{{ .Values.metrics.geo_ip.city_db_url }}"
 
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
   # This is an unmoderated plugin index, so only install plugins/themes you trust
   index:
     enabled: true
-    check_latest_versions_interval: '4 hours' # How often you want to check new plugins/themes versions
-    url: 'https://packages.joinpeertube.org'
+    check_latest_versions_interval: "4 hours" # How often you want to check new plugins/themes versions
+    url: "https://packages.joinpeertube.org"
 
 federation:
   # Enable ActivityPub endpoints (inbox/outbox)
@@ -483,7 +419,7 @@ peertube:
     # Check and notify admins of new PeerTube versions
     enabled: true
     # You can use a custom URL if your want, that respect the format behind https://joinpeertube.org/api/v1/versions.json
-    url: 'https://joinpeertube.org/api/v1/versions.json'
+    url: "https://joinpeertube.org/api/v1/versions.json"
 
 webadmin:
   configuration:
@@ -504,8 +440,8 @@ feeds:
 remote_runners:
   # Consider jobs that are processed by a remote runner as stalled after this period of time without any update
   stalled_jobs:
-    live: '30 seconds'
-    vod: '2 minutes'
+    live: "30 seconds"
+    vod: "2 minutes"
 
 thumbnails:
   # When automatically generating a thumbnail from the video
@@ -519,28 +455,26 @@ thumbnails:
   # 1 size for the thumbnail (displayed in video miniatures)
   # 1 size for the preview (displayed in the video player)
   sizes:
-    -
-      width: 280
+    - width: 280
       height: 157
 
-    -
-      width: 850
+    - width: 850
       height: 480
 
 stats:
   # Display registration requests stats (average response time, total requests...)
   registration_requests:
-    enabled: {{ .Values.stats.enabled }}
+    enabled: "{{ .Values.stats.enabled }}"
 
   # Display abuses stats (average response time, total abuses...)
   abuses:
-    enabled: {{ .Values.stats.enabled }}
+    enabled: "{{ .Values.stats.enabled }}"
 
   total_moderators:
-    enabled: {{ .Values.stats.enabled }}
+    enabled: "{{ .Values.stats.enabled }}"
 
   total_admins:
-    enabled: {{ .Values.stats.enabled }}
+    enabled: "{{ .Values.stats.enabled }}"
 
 ###############################################################################
 #
@@ -557,7 +491,7 @@ stats:
 admin:
   # Used to generate the root user at first startup
   # And to receive emails from the contact form
-  email: {{ .Values.instance.admin_email }}
+  email: "{{ .Values.instance.admin_email }}"
 
 contact_form:
   enabled: true
@@ -586,7 +520,7 @@ user:
   video_quota: -1
   video_quota_daily: -1
 
-  default_channel_name: 'Main $1 channel' # The placeholder $1 is used to represent the user's username
+  default_channel_name: "Main $1 channel" # The placeholder $1 is used to represent the user's username
 
 video_channels:
   max_per_user: 20 # Allows each user to create up to 20 video channels.
@@ -622,7 +556,7 @@ transcoding:
   # Choose the local transcoding profile
   # New profiles can be added by plugins
   # Available in core PeerTube: 'default'
-  profile: 'default'
+  profile: "default"
 
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     0p: false # audio-only (creates mp4 without video stream)
@@ -715,8 +649,8 @@ live:
     port: 1936
 
     # Absolute paths
-    key_file: ''
-    cert_file: ''
+    key_file: ""
+    cert_file: ""
 
     # Public hostname of your RTMPS server
     # Use null to use the same value than `webserver.hostname`
@@ -738,7 +672,7 @@ live:
     # Choose the local transcoding profile
     # New profiles can be added by plugins
     # Available in core PeerTube: 'default'
-    profile: 'default'
+    profile: "default"
 
     resolutions:
       0p: false # Audio only
@@ -776,7 +710,7 @@ video_transcription:
 
   # Choose engine for local transcription
   # Supported: 'openai-whisper' or 'whisper-ctranslate2'
-  engine: 'whisper-ctranslate2'
+  engine: "whisper-ctranslate2"
 
   # You can set a custom engine path for local transcription
   # If not provided, PeerTube will try to automatically install it in the PeerTube bin directory
@@ -784,7 +718,7 @@ video_transcription:
 
   # Choose engine model for local transcription
   # Available for 'openai-whisper' and 'whisper-ctranslate2': 'tiny', 'base', 'small', 'medium', 'large-v2' or 'large-v3'
-  model: 'small'
+  model: "small"
 
   # Or specify the model path:
   #  * PyTorch model file path for 'openai-whisper'
@@ -810,7 +744,7 @@ import:
     concurrency: 1
 
     # Set a custom video import timeout to not block import queue
-    timeout: '2 hours'
+    timeout: "2 hours"
 
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:
@@ -832,14 +766,14 @@ import:
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux (x64)
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv7)
         #   * https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux_armv7l (ARMv8/AArch64/ARM64)
-        url: 'https://api.github.com/repos/yt-dlp/yt-dlp/releases'
+        url: "https://api.github.com/repos/yt-dlp/yt-dlp/releases"
 
         # Release binary name: 'yt-dlp' or 'youtube-dl'
-        name: 'yt-dlp'
+        name: "yt-dlp"
 
         # Path to the python binary to execute for youtube-dl or yt-dlp
         # Set to null if you use a youtube-dl executable
-        python_path: '/usr/bin/python3'
+        python_path: "/usr/bin/python3"
 
       # IPv6 is very strongly rate-limited on most sites supported by youtube-dl
       force_ipv4: false
@@ -849,7 +783,7 @@ import:
       # PeerTube will randomly select a proxy from the following list
       # You may need to use a standalone youtube-dl binary (see `url` key comment above) to use this feature
       proxies:
-#        - "https://username:password@example.com:8888"
+    #        - "https://username:password@example.com:8888"
 
     # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
     torrent:
@@ -878,77 +812,76 @@ import:
 
 export:
   users:
-    enabled: {{ .Values.export.users.enabled }}
-    max_user_video_quota: '{{ .Values.export.users.max_user_video_quota }}'
-    export_expiration: '{{ .Values.export.users.export_expiration }}'
+    enabled: "{{ .Values.export.users.enabled }}"
+    max_user_video_quota: "{{ .Values.export.users.max_user_video_quota }}"
+    export_expiration: "{{ .Values.export.users.export_expiration }}"
 
 auto_blacklist:
   videos:
     of_users:
-      enabled: {{ .Values.instance.auto_blacklist }}
-
+      enabled: "{{ .Values.instance.auto_blacklist }}"
 
 # Instance settings
 instance:
-  name: 'PeerTube'
-  short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
-  description: 'Welcome to this PeerTube instance!' # Support markdown
-  terms: 'No terms for now.' # Support markdown
-  code_of_conduct: '' # Supports markdown
+  name: "{{ .Values.instance.name }}"
+  short_description: "{{ .Values.instance.short_description }}"
+  description: "{{ .Values.instance.description }}"
+  terms: "{{ .Values.instance.terms }}"
+  code_of_conduct: "{{ .Values.instance.code_of_conduct }}"
 
   # Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc
-  moderation_information: '' # Supports markdown
+  moderation_information: "{{ .Values.instance.moderation_information }}"
 
   # Why did you create this instance?
-  creation_reason: '' # Supports Markdown
+  creation_reason: "{{ .Values.instance.creation_reason }}"
 
   # Who is behind the instance? A single person? A non profit?
-  administrator: '' # Supports Markdown
+  administrator: "{{ .Values.instance.administrator }}"
 
   # How long do you plan to maintain this instance?
-  maintenance_lifetime: '' # Supports Markdown
+  maintenance_lifetime: "{{ .Values.instance.maintenance_lifetime }}"
 
   # How will you pay the PeerTube instance server? With your own funds? With users donations? Advertising?
-  business_model: '' # Supports Markdown
+  business_model: "{{ .Values.instance.business_model }}"
 
   # If you want to explain on what type of hardware your PeerTube instance runs
   # Example: '2 vCore, 2GB RAM...'
-  hardware_information: '' # Supports Markdown
+  hardware_information: "{{ .Values.instance.hardware_information }}"
 
   # Describe the languages spoken on your instance, to interact with your users for example
   # Uncomment or add the languages you want
   # List of supported languages: https://peertube.cpy.re/api/v1/videos/languages
   # PeerTube plugins can add additional languages to the official list of supported languages
   languages:
-#    - en
-#    - es
-#    - fr
+    - en
+  #    - es
+  #    - fr
 
   # Describe the main categories of your instance (to explain for example that your instance is dedicated to music, gaming, etc.)
   # Uncomment categories you want
   # List of supported categories: https://peertube.cpy.re/api/v1/videos/categories
   # PeerTube plugins can add additional categories to the official list of supported categories
   categories:
-#    - 1  # Music
-#    - 2  # Films
-#    - 3  # Vehicles
-#    - 4  # Art
-#    - 5  # Sports
-#    - 6  # Travels
-#    - 7  # Gaming
-#    - 8  # People
-#    - 9  # Comedy
-#    - 10 # Entertainment
-#    - 11 # News & Politics
-#    - 12 # How To
-#    - 13 # Education
-#    - 14 # Activism
-#    - 15 # Science & Technology
-#    - 16 # Animals
-#    - 17 # Kids
-#    - 18 # Food
+  #    - 1  # Music
+  #    - 2  # Films
+  #    - 3  # Vehicles
+  #    - 4  # Art
+  #    - 5  # Sports
+  #    - 6  # Travels
+  #    - 7  # Gaming
+  #    - 8  # People
+  #    - 9  # Comedy
+    - 10 # Entertainment
+  #    - 11 # News & Politics
+  #    - 12 # How To
+  #    - 13 # Education
+  #    - 14 # Activism
+  #    - 15 # Science & Technology
+  #    - 16 # Animals
+  #    - 17 # Kids
+  #    - 18 # Food
 
-  default_client_route: '/videos/trending'
+  default_client_route: "/videos/trending"
 
   # Whether or not the instance is dedicated to NSFW content
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
@@ -956,11 +889,11 @@ instance:
   is_nsfw: false
   # By default, `do_not_list` or `blur` or `display` NSFW videos
   # Could be overridden per user with a setting
-  default_nsfw_policy: 'do_not_list'
+  default_nsfw_policy: "do_not_list"
 
   customizations:
-    javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
-    css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
+    javascript: "" # Directly your JavaScript code (without <script> tags). Will be eval at runtime
+    css: "" # Directly your CSS code (without <style> tags). Will be injected at runtime
   # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add `/` to `Disallow:`
   robots: |
     User-agent: *
@@ -977,28 +910,28 @@ services:
   twitter:
     # Indicates the Twitter/X account for the website or platform where the content was published
     # This is just an information injected in HTML that is required by Twitter/X
-    username: '{{ .Values.instance.twitter_username }}'
+    username: "{{ .Values.instance.twitter_username }}"
 
 followers:
   instance:
-    enabled: {{ .Values.instance.followers.enabled }}
-    manual_approval: {{ .Values.instance.followers.manual_approval }}
+    enabled: "{{ .Values.instance.followers.enabled }}"
+    manual_approval: "{{ .Values.instance.followers.manual_approval }}"
 
 followings:
   instance:
     auto_follow_back:
-      enabled: {{ .Values.instance.followings.auto_follow_back.enabled }}
+      enabled: "{{ .Values.instance.followings.auto_follow_back.enabled }}"
     auto_follow_index:
-      enabled: {{ .Values.instance.followings.auto_follow_index.enabled }}
-      index_url: '{{ .Values.instance.followings.auto_follow_index.index_url }}'
+      enabled: "{{ .Values.instance.followings.auto_follow_index.enabled }}"
+      index_url: "{{ .Values.instance.followings.auto_follow_index.index_url }}"
 
 theme:
-  default: {{ .Values.instance.default_theme }}
+  default: "{{ .Values.instance.default_theme }}"
 
 broadcast_message:
   enabled: false
-  message: '' # Support markdown
-  level: 'info' # 'info' | 'warning' | 'error'
+  message: "" # Support markdown
+  level: "info" # 'info' | 'warning' | 'error'
   dismissable: false
 
 search:
@@ -1006,8 +939,8 @@ search:
   # If enabled, the associated group will be able to "escape" from the instance follows
   # That means they will be able to follow channels, watch videos, list videos of non followed instances
   remote_uri:
-    users: true
-    anonymous: false
+    users: "{{ .Values.search.remote_uri.users }}"
+    anonymous: "{{ .Values.search.remote_uri.anonymous }}"
 
   # Use a third party index instead of your local index, only for search results
   # Useful to discover content outside of your instance
@@ -1015,24 +948,24 @@ search:
   # If you do not enable remote_uri search for anonymous user, your instance will redirect the user on the origin instance
   # instead of loading the video locally
   search_index:
-    enabled: false
+    enabled: "{{ .Values.search.search_index.enabled }}"
     # URL of the search index, that should use the same search API and routes
     # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
-    url: ''
+    url: "{{ .Values.search.search_index.url }}"
     # You can disable local search in the client, so users only use the search index
-    disable_local_search: false
+    disable_local_search: "{{ .Values.search.search_index.disable_local_search }}"
     # If you did not disable local search in the client, you can decide to use the search index by default
-    is_default_search: false
+    is_default_search: "{{ .Values.search.search_index.is_default_search }}"
 
 # PeerTube client/interface configuration
 client:
   videos:
     miniature:
       # By default PeerTube client displays author username
-      prefer_author_display_name: false
-      display_author_avatar: false
+      prefer_author_display_name: "{{ .Values.client.videos.miniature.prefer_author_display_name }}"
+      display_author_avatar: "{{ .Values.client.videos.miniature.display_author_avatar }}"
 
     resumable_upload:
       # Max size of upload chunks, e.g. '90MB'
@@ -1043,64 +976,22 @@ client:
     login:
       # If you enable only one external auth plugin
       # You can automatically redirect your users on this external platform when they click on the login button
-      redirect_on_single_external_auth: false
+      redirect_on_single_external_auth: "{{ .Values.client.menu.login.redirect_on_single_external_auth }}"
 
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
-  enabled: true
+  enabled: "{{ .Values.storyboards.enabled }}"
 
-
-
-
-#######################################3
-
-
-
-instance:
-  name: '{{ .Values.instance.name }}'
-  short_description: '{{ .Values.instance.short_description }}'
-  description: '{{ .Values.instance.description | markdownify }}'
-  terms: '{{ .Values.instance.terms | markdownify }}'
-  code_of_conduct: '{{ .Values.instance.code_of_conduct | markdownify }}'
-  moderation_information: '{{ .Values.instance.moderation_information | markdownify }}'
-  creation_reason: '{{ .Values.instance.creation_reason | markdownify }}'
-  administrator: '{{ .Values.instance.administrator | markdownify }}'
-  maintenance_lifetime: '{{ .Values.instance.maintenance_lifetime | markdownify }}'
-  business_model: '{{ .Values.instance.business_model | markdownify }}'
-  hardware_information: '{{ .Values.instance.hardware_information | markdownify }}'
-
+#######################################
 users:
-  enabled: {{ .Values.users.enabled }}
+  enabled: "{{ .Values.users.enabled }}"
 
 video_channel_synchronization:
-  enabled: {{ .Values.video_channel_synchronization.enabled }}
-  max_per_user: {{ .Values.video_channel_synchronization.max_per_user }}
-  check_interval: '{{ .Values.video_channel_synchronization.check_interval }}'
-  videos_limit_per_synchronization: {{ .Values.video_channel_synchronization.videos_limit_per_synchronization }}
-  full_sync_videos_limit: {{ .Values.video_channel_synchronization.full_sync_videos_limit }}
+  enabled: "{{ .Values.video_channel_synchronization.enabled }}"
+  max_per_user: "{{ .Values.video_channel_synchronization.max_per_user }}"
+  check_interval: "{{ .Values.video_channel_synchronization.check_interval }}"
+  videos_limit_per_synchronization: "{{ .Values.video_channel_synchronization.videos_limit_per_synchronization }}"
+  full_sync_videos_limit: "{{ .Values.video_channel_synchronization.full_sync_videos_limit }}"
 
 dlp:
-  force_ipv4: {{ .Values.dlp.force_ipv4 }}
-
-search:
-  remote_uri:
-    users: {{ .Values.search.remote_uri.users }}
-    anonymous: {{ .Values.search.remote_uri.anonymous }}
-  search_index:
-    enabled: {{ .Values.search.search_index.enabled }}
-    url: '{{ .Values.search.search_index.url }}'
-    disable_local_search: {{ .Values.search.search_index.disable_local_search }}
-    is_default_search: {{ .Values.search.search_index.is_default_search }}
-
-client:
-  videos:
-    miniature:
-      prefer_author_display_name: {{ .Values.client.videos.miniature.prefer_author_display_name }}
-      display_author_avatar: {{ .Values.client.videos.miniature.display_author_avatar }}
-
-  menu:
-    login:
-      redirect_on_single_external_auth: {{ .Values.client.menu.login.redirect_on_single_external_auth }}
-
-storyboards:
-  enabled: {{ .Values.storyboards.enabled }}
+  force_ipv4: "{{ .Values.dlp.force_ipv4 }}"

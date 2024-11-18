@@ -15,6 +15,19 @@ apiVersionOverrides: {}
 
 strategy: 'type: Recreate'
 
+global:
+  deploymentAnnotations:
+    app.kubernetes.io/name: peertube
+    app.kubernetes.io/part-of: peertube-stack
+  podLabels:
+    environment: production
+  podAnnotations:
+    logging.k8s.io/component: peertube
+  revisionHistoryLimit: 3
+  image:
+    imagePullPolicy: Always
+
+
 # Redis server for short time storage
 redis:
   enabled: true
@@ -40,6 +53,14 @@ redis:
     servicePortSentinel: 26379
     sentinelHostname: ''
     nodePortHttp: ''
+  deploymentAnnotations:
+    app.kubernetes.io/name: peertube
+    app.kubernetes.io/part-of: peertube-stack
+  podLabels:
+    environment: production
+  podAnnotations:
+    logging.k8s.io/component: peertube
+  revisionHistoryLimit: 3
 
 database:
   enabled: true
@@ -57,6 +78,14 @@ database:
     servicePortHttpName: db
     servicePortHttp: 5432
     nodePortHttp: ''
+  deploymentAnnotations:
+    app.kubernetes.io/name: peertube
+    app.kubernetes.io/part-of: peertube-stack
+  podLabels:
+    environment: production
+  podAnnotations:
+    logging.k8s.io/component: peertube
+  revisionHistoryLimit: 3
 
 
 selectorLabels: []
@@ -95,6 +124,14 @@ peertube:
   image: 
     repository: 'Chocobozzz/PeerTube'
     image: 'v6.3.2-bookworm'
+  deploymentAnnotations:
+    app.kubernetes.io/name: peertube
+    app.kubernetes.io/part-of: peertube-stack
+  podLabels:
+    environment: production
+  podAnnotations:
+    logging.k8s.io/component: peertube
+  revisionHistoryLimit: 3
 
 live:
   enabled: false
@@ -155,9 +192,12 @@ s3:
   region: 'us-east-1'
   # If this is set to a bucket name, that bucket will be used by all bucket types
   # The buckets.*.bucket_name will be used as a folder prefix.
-  single_bucket: ''
+  single_bucket:
+    bucket_name: ''
+    prefix: ''
+    base_url: ''
+    enabled: true
   buckets:
-    enabled: false
     streaming_playlists:
       bucket_name: 'streaming-playlists'
 
@@ -372,20 +412,20 @@ instance:
 
 ########################################
 
-# instance:
-#   name: 'PeerTube'
-#   short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
-#   description: 'Welcome to this PeerTube instance!'
-#   terms: 'No terms for now.' 
-#   code_of_conduct: '' 
-#   moderation_information: '' 
-#   creation_reason: '' 
-#   administrator: '' 
-#   maintenance_lifetime: '' 
-#   business_model: '' 
-#   hardware_information: ''
-#   # New videos automatically blacklisted so moderators can review before publishing
-#   auto_blacklist: false
+server-specific:
+  name: 'PeerTube'
+  short_description: 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
+  description: 'Welcome to this PeerTube instance!'
+  terms: 'No terms for now.' 
+  code_of_conduct: '' 
+  moderation_information: '' 
+  creation_reason: '' 
+  administrator: '' 
+  maintenance_lifetime: '' 
+  business_model: '' 
+  hardware_information: ''
+  # New videos automatically blacklisted so moderators can review before publishing
+  auto_blacklist: false
 
 users:
   enabled: true

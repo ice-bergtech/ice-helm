@@ -1,36 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.server.deploymentAnnotations) }}
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.peertube.deploymentAnnotations) }}
   annotations:
     {{- range $key, $value := . }}
-    {{ $key }}: {{ $value | quote }}
+    {{ $key }}: {{ $value }}
     {{- end }}
   {{- end }}
   name: {{- .Values.name }}
   namespace: {{- .Values.namespace }}
-  labels:
-    {{- include "argo-cd.labels" (dict "context" . "component" .Values.server.name "name" .Values.server.name) | nindent 4 }}
 spec:
   replicas: {{ .Values.peertube.replicas }}
-  selector:
-    matchLabels:
-      {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.server.name) | nindent 6 }}
-  {{- with include "argo-cd.strategy" (mergeOverwrite (deepCopy .Values.global.deploymentStrategy) .Values.server.deploymentStrategy) }}
-  strategy:
-    {{- trim . | nindent 4 }}
-  {{- end }}
   template:
     metadata:
       annotations:
-        {{- with (mergeOverwrite (deepCopy .Values.global.podAnnotations) .Values.server.podAnnotations) }}
+        {{- with (mergeOverwrite (deepCopy .Values.global.podAnnotations) .Values.peertube.podAnnotations) }}
         {{- range $key, $value := . }}
-        {{ $key }}: {{ $value | quote }}
+        {{ $key }}: {{ $value }}
         {{- end }}
         {{- end }}
       labels:
-        {{- include "argo-cd.labels" (dict "context" . "component" .Values.server.name "name" .Values.server.name) | nindent 8 }}
-        {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.server.podLabels) }}
+        {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.peertube.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:

@@ -26,22 +26,12 @@ To remove:
 helm delete <chart>
 ```
 
-## Peertube
-
-Commands:
+##
 
 ```sh
-helm repo add ice-charts https://ice-bergtech.github.io/helm-charts/
-helm install peertube ice-charts/peertube --version 0.0.1
+task chart:template -- <chart>
 ```
-
-Minimal config:
-
-```sh
-
-```
-
 
 ## References
 
-[Pascal Iske](https://github.com/pascaliske/helm-charts)
+[Pascal Iske](https://pascaliske.dev/): [pascaliske/helm-charts](https://github.com/pascaliske/helm-charts)

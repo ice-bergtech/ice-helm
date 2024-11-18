@@ -39,5 +39,3 @@ spec:
       {{- if eq .Values.peertube.service.type "NodePort" }}
       nodePort: {{ .Values.peertube.service.nodePortHttp }}
       {{- end }}
-  selector:
-    {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.server.name) | nindent 4 }}

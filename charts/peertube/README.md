@@ -27,10 +27,15 @@ The following values can be used to adjust the helm chart.
 | client.videos.miniature.display_author_avatar | bool | `false` |  |
 | client.videos.miniature.prefer_author_display_name | bool | `false` |  |
 | database.containerPorts.db | int | `5432` |  |
+| database.deploymentAnnotations."app.kubernetes.io/name" | string | `"peertube"` |  |
+| database.deploymentAnnotations."app.kubernetes.io/part-of" | string | `"peertube-stack"` |  |
 | database.enabled | bool | `true` |  |
 | database.image.repository | string | `nil` |  |
 | database.image.tag | string | `nil` |  |
 | database.name | string | `"postgres"` |  |
+| database.podAnnotations."logging.k8s.io/component" | string | `"peertube"` |  |
+| database.podLabels.environment | string | `"production"` |  |
+| database.revisionHistoryLimit | int | `3` |  |
 | database.service.annotations | string | `nil` |  |
 | database.service.labels | string | `nil` |  |
 | database.service.nodePortHttp | string | `""` |  |
@@ -44,6 +49,12 @@ The following values can be used to adjust the helm chart.
 | followings.instance.auto_follow_back.enabled | bool | `false` |  |
 | followings.instance.auto_follow_index.enabled | bool | `false` |  |
 | followings.instance.auto_follow_index.index_url | string | `""` |  |
+| global.deploymentAnnotations."app.kubernetes.io/name" | string | `"peertube"` |  |
+| global.deploymentAnnotations."app.kubernetes.io/part-of" | string | `"peertube-stack"` |  |
+| global.image.imagePullPolicy | string | `"Always"` |  |
+| global.podAnnotations."logging.k8s.io/component" | string | `"peertube"` |  |
+| global.podLabels.environment | string | `"production"` |  |
+| global.revisionHistoryLimit | int | `3` |  |
 | instance."admin.email" | string | `""` |  |
 | instance."contact_form.enabled" | bool | `false` |  |
 | instance.admin_email | string | `"admin@example.com"` |  |
@@ -112,10 +123,15 @@ The following values can be used to adjust the helm chart.
 | namespace | string | `peertube` | Override the namespace |
 | peertube.containerPorts.stream | int | `1935` |  |
 | peertube.containerPorts.webgui | int | `9000` |  |
+| peertube.deploymentAnnotations."app.kubernetes.io/name" | string | `"peertube"` |  |
+| peertube.deploymentAnnotations."app.kubernetes.io/part-of" | string | `"peertube-stack"` |  |
 | peertube.image.image | string | `"v6.3.2-bookworm"` |  |
 | peertube.image.repository | string | `"Chocobozzz/PeerTube"` |  |
 | peertube.name | string | `"peertube"` |  |
+| peertube.podAnnotations."logging.k8s.io/component" | string | `"peertube"` |  |
+| peertube.podLabels.environment | string | `"production"` |  |
 | peertube.replicas | int | `1` |  |
+| peertube.revisionHistoryLimit | int | `3` |  |
 | peertube.service.annotations | string | `nil` |  |
 | peertube.service.externalIPs | string | `""` |  |
 | peertube.service.externalTrafficPolicy | string | `""` |  |
@@ -132,10 +148,15 @@ The following values can be used to adjust the helm chart.
 | peertube.service.type | string | `"ClusterIP"` | one of: ClusterIP | LoadBalancer | NodePort |
 | redis.containerPorts.redis | int | `6379` |  |
 | redis.containerPorts.sentinal | int | `26379` |  |
+| redis.deploymentAnnotations."app.kubernetes.io/name" | string | `"peertube"` |  |
+| redis.deploymentAnnotations."app.kubernetes.io/part-of" | string | `"peertube-stack"` |  |
 | redis.enabled | bool | `true` |  |
 | redis.image.repository | string | `"redis"` |  |
 | redis.image.tag | string | `"6-alpine"` |  |
 | redis.name | string | `"redis"` |  |
+| redis.podAnnotations."logging.k8s.io/component" | string | `"peertube"` |  |
+| redis.podLabels.environment | string | `"production"` |  |
+| redis.revisionHistoryLimit | int | `3` |  |
 | redis.sentinal.enabled | bool | `false` |  |
 | redis.sentinal.master_name | string | `""` |  |
 | redis.sentinal.tls | bool | `false` |  |
@@ -148,7 +169,6 @@ The following values can be used to adjust the helm chart.
 | redis.service.servicePortSentinel | int | `26379` |  |
 | redis.service.servicePortSentinelName | string | `"sentinal"` |  |
 | redis.service.type | string | `"ClusterIP"` | one of: ClusterIP | LoadBalancer | NodePort |
-| s3.buckets.enabled | bool | `false` |  |
 | s3.buckets.original_video_files.base_url | string | `""` |  |
 | s3.buckets.original_video_files.bucket_name | string | `"original-video-files"` |  |
 | s3.buckets.original_video_files.prefix | string | `""` |  |
@@ -169,7 +189,10 @@ The following values can be used to adjust the helm chart.
 | s3.max_upload_part | string | `"100MB"` |  |
 | s3.proxy_private_files | bool | `true` |  |
 | s3.region | string | `"us-east-1"` |  |
-| s3.single_bucket | string | `""` |  |
+| s3.single_bucket.base_url | string | `""` |  |
+| s3.single_bucket.bucket_name | string | `""` |  |
+| s3.single_bucket.enabled | bool | `true` |  |
+| s3.single_bucket.prefix | string | `""` |  |
 | s3.upload_acl.private | string | `"private"` |  |
 | s3.upload_acl.public | string | `"public-read"` |  |
 | search.remote_uri.anonymous | bool | `false` |  |
@@ -179,6 +202,18 @@ The following values can be used to adjust the helm chart.
 | search.search_index.is_default_search | bool | `false` |  |
 | search.search_index.url | string | `""` |  |
 | selectorLabels | list | `[]` |  |
+| server-specific.administrator | string | `""` |  |
+| server-specific.auto_blacklist | bool | `false` |  |
+| server-specific.business_model | string | `""` |  |
+| server-specific.code_of_conduct | string | `""` |  |
+| server-specific.creation_reason | string | `""` |  |
+| server-specific.description | string | `"Welcome to this PeerTube instance!"` |  |
+| server-specific.hardware_information | string | `""` |  |
+| server-specific.maintenance_lifetime | string | `""` |  |
+| server-specific.moderation_information | string | `""` |  |
+| server-specific.name | string | `"PeerTube"` |  |
+| server-specific.short_description | string | `"PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser."` |  |
+| server-specific.terms | string | `"No terms for now."` |  |
 | services.twitter.username | string | `nil` |  |
 | storyboards.enabled | bool | `true` |  |
 | strategy | string | `"type: Recreate"` |  |
