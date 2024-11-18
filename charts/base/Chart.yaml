@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://json.schemastore.org/chart.json
+apiVersion: v2
+type: library
+name: base
+description: A Helm chart for Kubernetes
+version: 1.2.0
+appVersion: ""
+
+home: https://github.com/ice-bergtech/ice-helm
+sources:
+  - https://github.com/ice-bergtech/helm-charts/tree/main/charts/base
+keywords:
+  - library-chart
+maintainers:
+  - name: Iceberg Tech
+    url: https://ice-bergtech.github.io/

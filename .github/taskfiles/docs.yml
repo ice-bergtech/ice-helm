@@ -13,7 +13,7 @@ tasks:
       - echo "hide:" >> docs/LICENSE.md
       - echo "  - navigation" >> docs/LICENSE.md
       - echo "---" >> docs/LICENSE.md
-      - cat LICENSE.md >> docs/LICENSE.md
+      - cat LICENSE >> docs/LICENSE.md
 
   serve:
     desc: serve documentation for development purposes
