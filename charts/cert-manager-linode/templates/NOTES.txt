@@ -1,0 +1,40 @@
+
+
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+...
+spec:
+  acme:
+    solvers:
++     - dns01:
++         webhook:
++           groupName: acme.cluster.local
++           solverName: linode
++           config:
++             apiKey: <your-api-key>
+
+Or by referencing a secret:
+
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+...
+spec:
+  acme:
+    solvers:
++     - dns01:
++         webhook:
++           groupName: acme.cluster.local
++           solverName: linode
++           config:
++             apiKeySecretRef:
++               name: linode-token
++               key: data
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: 'linode-token'
+  namespace: cert-manager
+stringData:
+  data: 'your-api-key'
+---

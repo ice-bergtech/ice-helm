@@ -1,19 +1,31 @@
+# -- the APIService group name to attach to
 groupName: acme.cluster.local
 
+# -- certManager contains config shared with cert-manager deployment
 certManager:
+  # -- name of the deployment namespace
   namespace: cert-manager
+  # -- name of the service account
   serviceAccountName: cert-manager
 
 image:
+  # -- repository to pull the image from
   repository: monostream/cert-manager-linode
+  # -- image tag to pull
   tag: latest
+  # -- image pull policy
   pullPolicy: Always
 
+# -- Override chart name 
 nameOverride: ""
+# -- Override chart full name
 fullnameOverride: ""
 
 service:
+  # -- service type
   type: ClusterIP
+  # -- service port
   port: 443
 
+# -- additional resources to deploy
 resources: {}

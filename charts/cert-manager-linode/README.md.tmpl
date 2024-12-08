@@ -14,7 +14,64 @@
 
 ## Usage
 
-**Note:** This chart is a library chart which can not be used directly!
+Performs the ACME DNS verification on behalf of cert-manager using the Linode API.
+Cert-manager dispatches requests through a dns01 webhook: https://cert-manager.io/docs/configuration/acme/dns01/webhook/
+
+To use, Create or modify a ClusterIssuer to point to the deployment.
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: your-email-address
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          webhook:
+            groupName: acme.cluster.local
+            solverName: linode
+            config:
+              apiKey: <your-api-key>
+```
+
+To not have the api key as plaintext, it can also be passed as a secret:
+Pass API Key with a Secret:
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: your-email-address
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          webhook:
+            groupName: acme.cluster.local
+            solverName: linode
+            config:
+              apiKeySecretRef:
+                name: linode-token
+                key: data
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: 'linode-token'
+  namespace: cert-manager
+stringData:
+  data: 'your-api-key'
+---
+```
 
 {{ template "chart.valuesHeader" . }}
 
