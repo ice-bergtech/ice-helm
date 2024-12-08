@@ -1,0 +1,15 @@
+apiVersion: v2
+name: cert-manager-linode
+version: 0.3.0
+appVersion: latest
+description: Linode Cert-Manager Webhook
+keywords:
+  - linode
+  - Cert-Manager
+home: https://github.com/ice-bergtech/ice-helm
+
+
+
+maintainers:
+  - name: Iceberg Tech
+    url: https://ice-bergtech.github.io/
