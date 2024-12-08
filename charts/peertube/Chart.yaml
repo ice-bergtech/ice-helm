@@ -1,4 +1,5 @@
 apiVersion: v2
+type: application
 name: peertube
 version: 0.0.1
 appVersion: v6.3.2-bookworm

@@ -2,7 +2,7 @@
 
 > A Helm Chart for chocobozzz/peertube, a self-hosted federated video publishing platform
 
-[](https://github.com/ice-bergtech/ice-helm)[![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)
+[![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)[![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)
 
 * <https://github.com/ice-bergtech/helm-charts/tree/main/charts/peertube>
 * <https://github.com/Chocobozzz/PeerTube>
@@ -13,8 +13,6 @@
 - [`helm`](https://helm.sh) - Refer to their [docs](https://helm.sh/docs) to get started.
 
 ## Usage
-
-**Note:** This chart is a library chart which can not be used directly!
 
 ## Values
 
