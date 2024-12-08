@@ -1,8 +1,8 @@
-# [`cert-manager-linode`]()
+# [`cert-manager-linode`](https://github.com/ice-bergtech/ice-helm)
 
 > Linode Cert-Manager Webhook
 
-[]()[![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ]()
+[](https://github.com/ice-bergtech/ice-helm)[![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)
 
 ## Requirements
 
@@ -29,6 +29,12 @@ The following values can be used to adjust the helm chart.
 | resources | object | `{}` |  |
 | service.port | int | `443` |  |
 | service.type | string | `"ClusterIP"` |  |
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Iceberg Tech |  | <https://ice-bergtech.github.io/> |
 
 ## License
 

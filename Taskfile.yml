@@ -21,9 +21,17 @@ tasks:
     cmds:
       - brew install helm helm-docs
 
+  helm-lint:
+    desc: lint a helm chart
+    aliases:
+      - l
+    cmds:
+      - helm lint charts/{{.CLI_ARGS}}
+
   docs:
     summary: Documentation specific tasks.
     cmds:
       - task: docs:default
+      - task: chart:docs
       #- for chart in charts/*; do cp $chart/README.md docs/$chart.md; done
       #- cp -f .cr-index/index.yaml docs/index.yaml || curl https://{{.PROD_DOMAIN}}/index.yaml --output docs/index.yaml

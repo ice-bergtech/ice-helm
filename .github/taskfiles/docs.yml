@@ -8,7 +8,7 @@ tasks:
   default-pages:
     desc: prepare default documentation pages
     cmds:
-      - cat README.md >> docs/index.md
+      - cat README.md > docs/index.md
       - echo "---" > docs/LICENSE.md
       - echo "hide:" >> docs/LICENSE.md
       - echo "  - navigation" >> docs/LICENSE.md
