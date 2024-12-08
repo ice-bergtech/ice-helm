@@ -7,5 +7,5 @@ metadata:
 type: 
 data:
     helm-config.yaml: |-
-{{ .Files.Get "configmap/helm-config.yml.tpl" | nindent 4 }}
+{{ .Files.Get "configmap/helm-config.yaml" | nindent 4 }}
 

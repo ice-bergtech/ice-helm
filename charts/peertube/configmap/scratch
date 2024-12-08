@@ -1,0 +1,63 @@
+
+{{- if eq .Values.s3.single_bucket '' }}
+  streaming_playlists:
+    bucket_name: {{ .Values.s3.streaming_playlists.bucket_name }}
+
+    # Allows setting all buckets to the same value but with a different prefix
+    prefix: {{ .Values.s3.streaming_playlists.prefix }}
+
+    # Base url for object URL generation, scheme and host will be replaced by this URL
+    # Useful when you want to use a CDN/external proxy
+    base_url: {{ .Values.s3.streaming_playlists.base_url }}
+
+    # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
+    # which can be a problem depending on your object storage provider
+    # You can also choose to disable this feature to reduce live streams latency
+    # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
+    store_live_streams: {{ .Values.live.store_live_streams }}
+
+  web_videos:
+    bucket_name: {{ .Values.s3.web_videos.bucket_name }}
+    prefix: {{ .Values.s3.web_videos.prefix }}
+    base_url: {{ .Values.s3.web_videos.base_url }}
+
+  user_exports:
+    bucket_name: {{ .Values.s3.user_exports.bucket_name }}
+    prefix: {{ .Values.s3.user_exports.prefix }}
+    base_url: {{ .Values.s3.user_exports.base_url }}
+
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: {{ .Values.s3.original_video_files.bucket_name }}
+    prefix: {{ .Values.s3.original_video_files.prefix }}
+    base_url: {{ .Values.s3.original_video_files.base_url }}
+{{- else }}
+  streaming_playlists:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    # Allows setting all buckets to the same value but with a different prefix
+    prefix: {{ .Values.s3.web_videos.bucket_name }}
+    # Base url for object URL generation, scheme and host will be replaced by this URL
+    # Useful when you want to use a CDN/external proxy
+    base_url: '' # Example: 'https://mirror.example.com'
+    # PeerTube makes many small requests to the object storage provider to upload/delete/update live chunks
+    # which can be a problem depending on your object storage provider
+    # You can also choose to disable this feature to reduce live streams latency
+    # Live stream replays are not affected by this setting, so they are uploaded in object storage as regular VOD videos
+    store_live_streams: {{ .Values.live.store_live_streams }}
+
+  web_videos:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    prefix: {{ .Values.s3.web_videos.bucket_name }}
+    base_url: {{ .Values.s3.web_videos.base_url }}
+
+  user_exports:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    prefix: {{ .Values.s3.user_exports.bucket_name }}
+    base_url: {{ .Values.s3.user_exports.base_url }}
+
+  # Same settings but for original video files
+  original_video_files:
+    bucket_name: {{ .Values.s3.single_bucket }}
+    prefix: {{ .Values.s3.original_video_files.bucket_name }}
+    base_url: {{ .Values.s3.original_video_files.base_url }}
+{{- end }}

@@ -247,19 +247,19 @@ log:
 # For more information: https://docs.joinpeertube.org/maintain/observability
 open_telemetry:
   metrics:
-    enabled: "{{ .Values.metrics.enabled }}"
+    enabled: "{{ .Values.metrics.open_telemetry.enabled }}"
 
     # How often viewers send playback stats to server
-    playback_stats_interval: "{{ .Values.metrics.playback_stats_interval }}"
+    playback_stats_interval: "{{ .Values.metrics.open_telemetry.playback_stats_interval }}"
 
     http_request_duration:
       # You can disable HTTP request duration metric that can have a high tag cardinality
-      enabled: "{{ .Values.metrics.http_request_duration.enabled }}"
+      enabled: "{{ .Values.metrics.open_telemetry.http_request_duration.enabled }}"
 
     # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
     prometheus_exporter:
-      hostname: "{{ .Values.metrics.prometheus_exporter.hostname }}"
-      port: "{{ .Values.metrics.prometheus_exporter.port }}"
+      hostname: "{{ .Values.metrics.open_telemetry.prometheus_exporter.hostname }}"
+      port: "{{ .Values.metrics.open_telemetry.prometheus_exporter.port }}"
 
   tracing:
     # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
@@ -464,17 +464,17 @@ thumbnails:
 stats:
   # Display registration requests stats (average response time, total requests...)
   registration_requests:
-    enabled: "{{ .Values.stats.enabled }}"
+    enabled: "{{ .Values.instance.stats.registration_requests }}"
 
   # Display abuses stats (average response time, total abuses...)
   abuses:
-    enabled: "{{ .Values.stats.enabled }}"
+    enabled: "{{ .Values.instance.stats.abuses }}"
 
   total_moderators:
-    enabled: "{{ .Values.stats.enabled }}"
+    enabled: "{{ .Values.instance.stats.total_moderators }}"
 
   total_admins:
-    enabled: "{{ .Values.stats.enabled }}"
+    enabled: "{{ .Values.instance.stats.total_admins }}"
 
 ###############################################################################
 #
@@ -812,9 +812,9 @@ import:
 
 export:
   users:
-    enabled: "{{ .Values.export.users.enabled }}"
-    max_user_video_quota: "{{ .Values.export.users.max_user_video_quota }}"
-    export_expiration: "{{ .Values.export.users.export_expiration }}"
+    enabled: "{{ .Values.instance.export.enabled }}"
+    max_user_video_quota: "{{ .Values.instance.export.max_user_video_quota }}"
+    export_expiration: "{{ .Values.instance.export.export_expiration }}"
 
 auto_blacklist:
   videos:
@@ -939,8 +939,8 @@ search:
   # If enabled, the associated group will be able to "escape" from the instance follows
   # That means they will be able to follow channels, watch videos, list videos of non followed instances
   remote_uri:
-    users: "{{ .Values.search.remote_uri.users }}"
-    anonymous: "{{ .Values.search.remote_uri.anonymous }}"
+    users: "{{ .Values.instance.search.remote_uri.users }}"
+    anonymous: "{{ .Values.instance.search.remote_uri.anonymous }}"
 
   # Use a third party index instead of your local index, only for search results
   # Useful to discover content outside of your instance
@@ -948,24 +948,24 @@ search:
   # If you do not enable remote_uri search for anonymous user, your instance will redirect the user on the origin instance
   # instead of loading the video locally
   search_index:
-    enabled: "{{ .Values.search.search_index.enabled }}"
+    enabled: "{{ .Values.instance.search.search_index.enabled }}"
     # URL of the search index, that should use the same search API and routes
     # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
-    url: "{{ .Values.search.search_index.url }}"
+    url: "{{ .Values.instance.search.search_index.url }}"
     # You can disable local search in the client, so users only use the search index
-    disable_local_search: "{{ .Values.search.search_index.disable_local_search }}"
+    disable_local_search: "{{ .Values.instance.search.search_index.disable_local_search }}"
     # If you did not disable local search in the client, you can decide to use the search index by default
-    is_default_search: "{{ .Values.search.search_index.is_default_search }}"
+    is_default_search: "{{ .Values.instance.search.search_index.is_default_search }}"
 
 # PeerTube client/interface configuration
 client:
   videos:
     miniature:
       # By default PeerTube client displays author username
-      prefer_author_display_name: "{{ .Values.client.videos.miniature.prefer_author_display_name }}"
-      display_author_avatar: "{{ .Values.client.videos.miniature.display_author_avatar }}"
+      prefer_author_display_name: "true"
+      display_author_avatar: "false"
 
     resumable_upload:
       # Max size of upload chunks, e.g. '90MB'
@@ -976,22 +976,15 @@ client:
     login:
       # If you enable only one external auth plugin
       # You can automatically redirect your users on this external platform when they click on the login button
-      redirect_on_single_external_auth: "{{ .Values.client.menu.login.redirect_on_single_external_auth }}"
+      redirect_on_single_external_auth: false
 
 storyboards:
   # Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video
-  enabled: "{{ .Values.storyboards.enabled }}"
+  enabled: true
 
 #######################################
 users:
-  enabled: "{{ .Values.users.enabled }}"
-
-video_channel_synchronization:
-  enabled: "{{ .Values.video_channel_synchronization.enabled }}"
-  max_per_user: "{{ .Values.video_channel_synchronization.max_per_user }}"
-  check_interval: "{{ .Values.video_channel_synchronization.check_interval }}"
-  videos_limit_per_synchronization: "{{ .Values.video_channel_synchronization.videos_limit_per_synchronization }}"
-  full_sync_videos_limit: "{{ .Values.video_channel_synchronization.full_sync_videos_limit }}"
+  enabled: "{{ .Values.instance.creation_enabled }}"
 
 dlp:
   force_ipv4: "{{ .Values.dlp.force_ipv4 }}"
