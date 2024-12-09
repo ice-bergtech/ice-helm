@@ -2,7 +2,9 @@
 
 > Linode Cert-Manager Webhook
 
-[![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)[![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)
+[![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)[![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ](https://github.com/ice-bergtech/ice-helm)
+
+* <https://github.com/ice-bergtech/cert-manager-linode>
 
 ## Requirements
 
@@ -81,8 +83,8 @@ The following values can be used to adjust the helm chart.
 | fullnameOverride | string | `""` | Override chart full name |
 | groupName | string | `"acme.cluster.local"` | the APIService group name to attach to |
 | image.pullPolicy | string | `"Always"` | image pull policy |
-| image.repository | string | `"monostream/cert-manager-linode"` | repository to pull the image from |
-| image.tag | string | `"latest"` | image tag to pull |
+| image.repository | string | `"ghcr.io/ice-bergtech/cert-manager-linode"` | repository to pull the image from |
+| image.tag | string | `"v0.4.0"` | image tag to pull |
 | nameOverride | string | `""` | Override chart name  |
 | resources | object | `{}` | additional resources to deploy |
 | service.port | int | `443` | service port |

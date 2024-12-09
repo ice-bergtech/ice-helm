@@ -10,9 +10,9 @@ certManager:
 
 image:
   # -- repository to pull the image from
-  repository: monostream/cert-manager-linode
+  repository: ghcr.io/ice-bergtech/cert-manager-linode
   # -- image tag to pull
-  tag: latest
+  tag: v0.4.0
   # -- image pull policy
   pullPolicy: Always
 
