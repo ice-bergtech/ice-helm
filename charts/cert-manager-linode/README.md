@@ -84,7 +84,7 @@ The following values can be used to adjust the helm chart.
 | groupName | string | `"acme.cluster.local"` | the APIService group name to attach to |
 | image.pullPolicy | string | `"Always"` | image pull policy |
 | image.repository | string | `"ghcr.io/ice-bergtech/cert-manager-linode"` | repository to pull the image from |
-| image.tag | string | `"v0.4.0"` | image tag to pull |
+| image.tag | string | `"0.4.0"` | image tag to pull |
 | nameOverride | string | `""` | Override chart name  |
 | resources | object | `{}` | additional resources to deploy |
 | service.port | int | `443` | service port |
