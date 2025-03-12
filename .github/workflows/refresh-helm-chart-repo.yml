@@ -65,7 +65,7 @@ jobs:
 
           echo "Indexing repository..."
           cd $repositoryRootDir
-          helm repo index --url ${{ needs.init.outputs.publish-url }} .
+          helm repo index --merge index.yaml --url ${{ needs.init.outputs.publish-url }} .
           echo "Repository indexed."
           
           echo "Pushing changes to repository branch..."
