@@ -1,6 +1,11 @@
 # -- the APIService group name to attach to
 groupName: acme.cluster.local
 
+deployment:
+  secretName: linode-token
+  secretKey: data
+  logLevel: 6
+
 # -- certManager contains config shared with cert-manager deployment
 certManager:
   # -- name of the deployment namespace

@@ -45,6 +45,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
+    resourceNames: [{{ .Values.deployment.secretName }}]
     verbs: ["get", "list", "watch"]
 
 ---
