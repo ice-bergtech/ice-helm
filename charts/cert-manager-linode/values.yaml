@@ -15,9 +15,9 @@ certManager:
 
 image:
   # -- repository to pull the image from
-  repository: ghcr.io/ice-bergtech/cert-manager-linode
+  repository: ghcr.io/ice-bergtech/cert-manager-webhook-linode
   # -- image tag to pull
-  tag: 0.4.1
+  tag: latest
   # -- image pull policy
   pullPolicy: Always
 

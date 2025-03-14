@@ -1,15 +1,15 @@
 apiVersion: v2
 type: application
 name: cert-manager-linode
-version: 0.4.1
-appVersion: 0.4.1
+version: 0.4.2
+appVersion: 0.4.2
 description: Linode Cert-Manager Webhook
 keywords:
   - linode
   - Cert-Manager
 home: https://github.com/ice-bergtech/ice-helm
 sources:
-  - https://github.com/ice-bergtech/cert-manager-linode
+  - https://github.com/ice-bergtech/cert-manager-webhook-linode
 
 maintainers:
   - name: Iceberg Tech
